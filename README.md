@@ -64,11 +64,13 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Anotações a serem feitas
 
-- Implementação de interfaces nos repositories para ser facil uma troca futura de banco
+- Implementação de interfaces nos repositories para ser facil uma troca futura de banco sem alterar outras camadas;
 - Utilização de swagger para sanitização dos dados
 - Versionamento da api, em caso de mudanças futuras
 - Sanitização de dados de api's externas e melhora na sanitização dos dados da api.
-- Limitações de requisições por um mesmo ip.
+- Limitações de requisições por um mesmo ip segurança.
+- Se aumentasse o número de banco de dados a pasta shared dentro de migration seria dividida.
+- Adicionaria os logs para a produção com o wintom para ficar fácil a depuração em caso de erro.
 
 ## License
 

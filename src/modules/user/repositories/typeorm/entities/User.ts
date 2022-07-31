@@ -39,7 +39,7 @@ class User {
 		examples: ['2021-05-01T00:00:00.000Z', 'Aug 31, 2022'],
 	})
 	@CreateDateColumn({ name: 'created_at' })
-	createdAt: Date | string;
+	createdAt: Date;
 }
 
 export default User;

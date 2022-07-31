@@ -67,7 +67,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Implementação de interfaces nos repositories para ser facil uma troca futura de banco
 - Utilização de swagger para sanitização dos dados
 - Versionamento da api, em caso de mudanças futuras
-- Sanitização de dados de api's externas.
+- Sanitização de dados de api's externas e melhora na sanitização dos dados da api.
 - Limitações de requisições por um mesmo ip.
 
 ## License

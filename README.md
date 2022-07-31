@@ -62,12 +62,24 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## Anotações a serem feitas
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Implementação de interfaces nos repositories para ser facil uma troca futura de banco
+- Utilização de swagger para sanitização dos dados
+- Versionamento da api, em caso de mudanças futuras
+- Sanitização de dados de api's externas.
+- Limitações de requisições por um mesmo ip.
 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Migration commands
+```bash
+# generate
+$ npm run typeorm -- migration:generate ./path/to/folder/nameMigration
+
+# run
+$ npm run typeorm -- migration:run
+```
+

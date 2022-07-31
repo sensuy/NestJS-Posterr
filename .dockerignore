@@ -1,0 +1,4 @@
+.git
+.cache
+docker-compose.yml
+Dockerfile

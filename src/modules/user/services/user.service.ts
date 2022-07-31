@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import ISeedUsersDTO from "../dtos/ISeedUsersDTO";
 import IUserRepository from "../repositories/IUserRepository";
 import { InsertResult } from "typeorm";
+import User from "../repositories/typeorm/entities/User";
 
 
 @Injectable()
@@ -22,6 +23,28 @@ class UserService {
 
 		const { raw } = usersCreated;
 		return raw;
+	}
+
+	async findUser(name: string): Promise<User> {
+		let user: User;
+		try {
+			user = await this.userRepository.listByName(name);
+		} catch (error) {
+			throw new HttpException('User creation failed.', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+
+		if (!user) {
+			throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+		}
+
+		const [,month, day, year] = new Date(user.createdAt).toDateString().split(' ');
+		console.log(`${user.userName} was created on ${month} ${day}, ${year}.`);
+		console.log(new Date(user.createdAt).toDateString());
+
+		user.createdAt = `${month} ${day}, ${year}`;
+		
+
+		return user;
 	}
 
 }

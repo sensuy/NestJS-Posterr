@@ -71,6 +71,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Limitações de requisições por um mesmo ip segurança.
 - Se aumentasse o número de banco de dados a pasta shared dentro de migration seria dividida.
 - Adicionaria os logs para a produção com o wintom para ficar fácil a depuração em caso de erro.
+- Work more on datetime specification.
 
 ## License
 

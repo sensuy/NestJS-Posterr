@@ -19,8 +19,8 @@ class User {
 
 	@ApiProperty({
 		description: 'The sum of the user\'s posts, reposts and quotes',
-		type: 'number',
-		example: 40,
+		type: 'string',
+		example: 'Reviewer',
 	})
 	@Column({ name: 'user_name', type: 'varchar', length: 14 })
 	userName: string;
@@ -36,10 +36,10 @@ class User {
 	@ApiProperty({
 		description: 'User\'s creation timestamp',
 		type: 'string',
-		example: '2021-05-01T00:00:00.000Z',
+		examples: ['2021-05-01T00:00:00.000Z', 'Aug 31, 2022'],
 	})
 	@CreateDateColumn({ name: 'created_at' })
-	createdAt: Date;
+	createdAt: Date | string;
 }
 
 export default User;

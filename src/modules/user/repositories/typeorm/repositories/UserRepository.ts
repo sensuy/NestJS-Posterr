@@ -21,10 +21,6 @@ class UserRepository implements IUserRepository {
 	public listByName(userName: string): Promise<User | null> {
 		return this.userRepository.findOne({where: {userName}});
 	}
-
-	public listAll(): Promise<User[]> {
-		return this.userRepository.find();
-	}
 }
 
 export default UserRepository;

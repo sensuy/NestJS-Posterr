@@ -7,6 +7,8 @@ export const SeedUserSchema = Joi.array().items(
 		interactions: Joi.number().valid(0).required(),
 	}));
 
+export const FindUserSchema = Joi.string().max(14).required()
+
 
 export const userSchemaResponse = {
 	type: 'array',

@@ -14,7 +14,7 @@ class Post {
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 	})
 	@PrimaryGeneratedColumn('uuid')
-	idpost: string;
+	postid: string;
 
 	@ApiProperty({
 		description: "User's id",

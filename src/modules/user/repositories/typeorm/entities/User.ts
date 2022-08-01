@@ -1,8 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import Post from 'modules/post/repositories/typeorm/entities/Post';
+import Quotes from 'modules/post/repositories/typeorm/entities/Quote';
+import Repost from 'modules/post/repositories/typeorm/entities/Repost';
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -40,6 +44,15 @@ class User {
 	})
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;
+
+	@OneToMany(() => Post, (post) => post.user)
+	posts: Post[];
+
+	@OneToMany(() => Repost, (repost) => repost.user)
+	reposts: Repost[];
+
+	@OneToMany(() => Quotes, (quote) => quote.user)
+	quotes: Quotes[];
 }
 
 export default User;

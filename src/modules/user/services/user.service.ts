@@ -38,8 +38,6 @@ class UserService {
 		}
 
 		const [,month, day, year] = new Date(user.createdAt).toDateString().split(' ');
-		console.log(`${user.userName} was created on ${month} ${day}, ${year}.`);
-		console.log(new Date(user.createdAt).toDateString());
 		Object.assign(user, { createdAt: `${month} ${day}, ${year}` });
 
 		return user;

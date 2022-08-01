@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-class ICreatePostDTO {
+class ICreateRepostDTO {
 	@ApiProperty({
 		description: 'Id of the user',
 		type: 'uuid',
@@ -8,11 +8,11 @@ class ICreatePostDTO {
 	})
 	fkUserId: string;
 	@ApiProperty({
-		description: 'Content of the post',
-		type: 'string',
-		example: "It's a beautiful day!"
+		description: 'Id of the post',
+		type: 'uuid',
+		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
 	})
-	content: string;
+	fkPostId: string;
 }
 
-export default ICreatePostDTO;
+export default ICreateRepostDTO;

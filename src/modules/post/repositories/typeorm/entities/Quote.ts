@@ -11,7 +11,7 @@ import {
 import Post from './Post';
 
 @Entity('quotes')
-class Quotes {
+class Quote {
 	@ApiProperty({
 		description: "Post's id",
 		type: 'uuid',
@@ -61,4 +61,4 @@ class Quotes {
 	post: Post;
 }
 
-export default Quotes;
+export default Quote;

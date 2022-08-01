@@ -27,8 +27,8 @@ class Post {
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 	})
-	@Column({ name: 'fk_iduser' })
-	fkIdUser: string;
+	@Column({ name: 'fk_userid' })
+	fkUserId: string;
 
 	@ApiProperty({
 		description: "Typed content of the post",

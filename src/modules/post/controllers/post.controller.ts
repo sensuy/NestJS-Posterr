@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UsePipes } from "@nestjs/common";
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiOperation, ApiServiceUnavailableResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiOperation, ApiServiceUnavailableResponse, ApiTags } from "@nestjs/swagger";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import PostResposnse from "../repositories/typeorm/entities/Post";
 import { CreatePostSchema } from "../schemas/post.schema";

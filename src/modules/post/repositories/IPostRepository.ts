@@ -6,6 +6,7 @@ interface IPostRepository {
   create(data: ICreatePostDTO): Post;
   save(post: Post): Promise<Post>;
   listById(postid: string): Promise<Post | null>;
+  listById(postid: string): Promise<Post | null>;
 }
 
 export default IPostRepository;

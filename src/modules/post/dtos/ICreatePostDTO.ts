@@ -6,7 +6,7 @@ class ICreatePostDTO {
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
 	})
-	fkIdUser: string;
+	fkUserId: string;
 	@ApiProperty({
 		description: 'Content of the post',
 		type: 'string',

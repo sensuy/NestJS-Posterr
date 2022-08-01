@@ -35,7 +35,7 @@ class Post {
 		type: 'string',
 		example: 'It is a beautiful day!',
 	})
-	@Column()
+	@Column({type: 'varchar', length: 777})
 	content: string;
 
 	@ApiProperty({

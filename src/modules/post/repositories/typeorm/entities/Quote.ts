@@ -41,7 +41,7 @@ class Quote {
 		type: 'string',
 		example: 'I do not know what to say',
 	})
-	@Column()
+	@Column({type: 'varchar', length: 777})
 	content: string;
 
 	@ApiProperty({

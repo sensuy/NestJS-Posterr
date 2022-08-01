@@ -73,6 +73,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Adicionaria os logs para a produção com o wintom para ficar fácil a depuração em caso de erro.
 - Work more on datetime specification.
 - Como todos os posts estão bem relacionados no banco de dados eles ficaram em um mesmo módulo.
+- Apesar de muita coisa poderia ser simplificada preferi fazer bem separarado para mostrar como esse projeto poderia escalar sem problemas.
 
 ## License
 

@@ -1,21 +1,22 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import IPostRepository from "../repositories/IPostRepository";
-import IRepostRepository from "../repositories/IRepostRepository";
-import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
-import Repost from "../repositories/typeorm/entities/Repost";
+import ICreateQuotetDTO from "../dtos/ICreateQuotetDTO";
+import Quote from "../repositories/typeorm/entities/Quote";
+import IQuoteRepository from "../repositories/IQuoteRepository";
 import IUserRepository from "modules/user/repositories/IUserRepository";
 
+
 @Injectable()
-class RepostService {
+class QuoteService {
 
 	constructor(
-		@Inject('IRepostRepository') private repostRepository: IRepostRepository,
+		@Inject('IQuoteRepository') private quoteRepository: IQuoteRepository,
 		@Inject('IPostRepository') private postRepository: IPostRepository,
 		@Inject('IUserRepository') private userRepository: IUserRepository
 	) { }
 
 
-	async createRepost(payload: ICreateRepostDTO): Promise<Repost> {
+	async createQuote(payload: ICreateQuotetDTO): Promise<Quote> {
 
 		const user = this.userRepository.listById(payload.fkUserId);
 
@@ -29,17 +30,17 @@ class RepostService {
 			throw new HttpException('Original Post not found', HttpStatus.NOT_FOUND);
 		}
 
-		let repost = this.repostRepository.create(payload);
+		let quote = this.quoteRepository.create(payload);
 
 		try {
-			repost = await this.repostRepository.save(repost);
+			quote = await this.quoteRepository.save(quote);
 		} catch (error) {
-			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+			throw new HttpException('Quote creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
-		return repost;
+		return quote;
 	}
 
 }
 
-export default RepostService;
+export default QuoteService;

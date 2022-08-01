@@ -25,12 +25,12 @@ class UserService {
 		return raw;
 	}
 
-	async findUser(name: string): Promise<User> {
+	async findUserByName(name: string): Promise<User> {
 		let user: User;
 		try {
 			user = await this.userRepository.listByName(name);
 		} catch (error) {
-			throw new HttpException('User creation failed.', HttpStatus.SERVICE_UNAVAILABLE);
+			throw new HttpException('User could not be found.', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
 		if (!user) {

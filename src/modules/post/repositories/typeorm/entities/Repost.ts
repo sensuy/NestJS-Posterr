@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import User from 'modules/user/repositories/typeorm/entities/User';
+import User from '../../../../user/repositories/typeorm/entities/User';
 import {
 	Column,
 	CreateDateColumn,

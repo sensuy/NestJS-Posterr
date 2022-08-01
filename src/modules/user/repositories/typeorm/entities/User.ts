@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import Post from 'modules/post/repositories/typeorm/entities/Post';
-import Quotes from 'modules/post/repositories/typeorm/entities/Quote';
-import Repost from 'modules/post/repositories/typeorm/entities/Repost';
+import Post from '../../../../post/repositories/typeorm/entities/Post';
+import Quotes from '../../../../post/repositories/typeorm/entities/Quote';
+import Repost from '../../../../post/repositories/typeorm/entities/Repost';
 import {
 	Column,
 	CreateDateColumn,

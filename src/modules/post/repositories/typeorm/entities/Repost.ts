@@ -33,8 +33,8 @@ class Repost {
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 	})
-	@Column({ name: 'fk_posterid', nullable: false })
-	fkPosterId: string;
+	@Column({ name: 'fk_postid', nullable: false })
+	fkPostId: string;
 
 	@ApiProperty({
 		description: "Repost's creation timestamp",
@@ -49,7 +49,7 @@ class Repost {
 	user: User;
 
 	@ManyToOne(() => Post, (post) => post.repost, { nullable: false })
-	@JoinColumn({ name: 'fk_posterid' })
+	@JoinColumn({ name: 'fk_postid' })
 	post: Post;
 }
 

@@ -17,10 +17,10 @@ class RepostService {
 
 	async createRepost(payload: ICreateRepostDTO): Promise<Repost> {
 
-		const user = this.userRepository.listById(payload.fkUserId);
+		const user = await this.userRepository.listById(payload.fkUserId);
 
 		if (!user) {
-			throw new HttpException('User does not exist.', HttpStatus.CONFLICT);
+			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
 		}
 
 		const post = await this.postRepository.listById(payload.fkPostId);

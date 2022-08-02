@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, MoreThan, Repository } from 'typeorm';
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from '../../IPostRepository';
 import Post from '../entities/Post';
@@ -23,6 +23,14 @@ class PostRepository implements IPostRepository {
 
 	listById(postid: string): Promise<Post> {
 		return this.postRepository.findOne({ where: { postid } });
+	}
+
+	countUserPostByDate(fkUserId: string, init: Date, final: Date): Promise<number> {
+		return this.postRepository
+			.createQueryBuilder()
+			.where('fk_userid = :fkUserId', { fkUserId })
+			.andWhere('created_at BETWEEN :init AND :final', { init, final })
+			.getCount();
 	}
 }
 

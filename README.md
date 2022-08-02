@@ -76,6 +76,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Apesar de muita coisa poderia ser simplificada preferi fazer bem separarado para mostrar como esse projeto poderia escalar sem problemas.
 - Utilizar o expcion filters para centralizar os tratamentos de erro @Catch.
 - Redis as microservice.
+- Midlewares para verficar post original e users!
+- Midlewares para contar a soma dos posts, reposts e quotes.
+
 
 ## License
 

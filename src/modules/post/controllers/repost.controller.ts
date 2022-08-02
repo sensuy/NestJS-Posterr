@@ -23,12 +23,11 @@ class RepostController {
 	@Post()
 	@ApiOperation({
 		summary: 'Create a new repost.',
-		description: 'With a postid this endpoint allows the user repost another user post.'
+		description: 'With a postid this endpoint allows the user repost another user post or quote.'
 	})
 	@ApiCreatedResponse({ description: 'Repost sucessfully created.', type: Repost })
 	@ApiServiceUnavailableResponse({ description: 'Repost creation failed.' })
-	@ApiNotFoundResponse({ description: 'Original Post not found.' })
-	@ApiConflictResponse({ description: 'User does not exist.' })
+	@ApiNotFoundResponse({ description: 'User does not exist.  |  Original Post not found.' })
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createPost(@Body() payload: ICreateRepostDTO): Promise<Repost> {

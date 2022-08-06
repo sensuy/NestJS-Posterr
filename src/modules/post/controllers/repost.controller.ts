@@ -30,6 +30,7 @@ class RepostController {
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createPost(@Body() payload: ICreateRepostDTO) {
+		this.repostService.createRepost(payload);
 	}
 }
 

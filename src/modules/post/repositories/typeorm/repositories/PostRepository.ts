@@ -22,7 +22,7 @@ class PostRepository implements IPostRepository {
 	}
 
 	listById(postid: string): Promise<Post> {
-		return this.postRepository.findOne({ where: { postid } });
+		return this.postRepository.findOneBy({ postid });
 	}
 
 	countUserPostByDate(fkUserId: string, init: Date, final: Date): Promise<number> {

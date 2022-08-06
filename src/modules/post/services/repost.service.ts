@@ -15,30 +15,16 @@ class RepostService {
 	) { }
 
 
-	// async createRepost(payload: ICreateRepostDTO): Promise<Repost> {
+	async createRepost(payload: ICreateRepostDTO) {
 
-	// 	const user = await this.userRepository.listById(payload.);
+		const post = await this.postRepository.listById(payload.postid);
 
-	// 	if (!user) {
-	// 		throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-	// 	}
+		console.log(post);
+		
 
-	// 	const post = await this.postRepository.listById(payload.fkPostId);
+		console.log({ payload });
 
-	// 	if (!post) {
-	// 		throw new HttpException('Original Post not found', HttpStatus.NOT_FOUND);
-	// 	}
-
-	// 	let repost = this.repostRepository.create(payload);
-
-	// 	try {
-	// 		repost = await this.repostRepository.save(repost);
-	// 	} catch (error) {
-	// 		throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
-	// 	}
-
-	// 	return repost;
-	// }
+	}
 
 }
 

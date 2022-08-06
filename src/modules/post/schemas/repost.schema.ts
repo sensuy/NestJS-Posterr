@@ -2,6 +2,6 @@ import * as Joi from 'joi';
 
 
 export const CreateRepostSchema = Joi.object({
-	fkUserId: Joi.string().uuid().required(),
-	fkPostId: Joi.string().uuid().required()
+	postFk: Joi.string().uuid().required(),
+	repostFk: Joi.string().uuid().required()
 })

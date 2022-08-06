@@ -14,10 +14,6 @@ class RepostRepository implements IRepostRepository {
 		private repostRepository: Repository<Repost>
 	) { }
 
-	public create(data: ICreateRepostDTO): Repost {
-		return this.repostRepository.create(data);
-	}
-
 	public save(post: Repost): Promise<Repost> {
 		return this.repostRepository.save(post);
 	}

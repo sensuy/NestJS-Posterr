@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import Quotes from './Quote';
 import Repost from './Repost';
+import Quote from './Quote';
 
 @Entity('post')
 class Post {
@@ -50,11 +51,14 @@ class Post {
 	@JoinColumn({ name: 'fk_userid' })
 	user: User;
 
-	@OneToMany(() => Repost, (repost) => repost.post)
-	repost: Repost[];
+	@OneToMany(() => Repost, (repost) => repost.postFk, { nullable: false })
+	post: Repost[];
 
-	@OneToMany(() => Quotes, (quote) => quote.post)
-	quote: Quotes[];
+	@OneToMany(() => Repost, (repost) => repost.repostFk, { nullable: false })
+	reposts: Repost[];
+
+	@OneToMany(() => Quote, (quote) => quote.post, { nullable: false })
+	quotes: Repost[];
 }
 
 export default Post;

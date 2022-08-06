@@ -1,7 +1,6 @@
 import { Body, Controller, Post, UsePipes } from "@nestjs/common";
 import {
 	ApiBadRequestResponse,
-	ApiConflictResponse,
 	ApiCreatedResponse,
 	ApiNotFoundResponse,
 	ApiOperation,
@@ -30,9 +29,7 @@ class RepostController {
 	@ApiNotFoundResponse({ description: 'User does not exist.  |  Original Post not found.' })
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
-	async createPost(@Body() payload: ICreateRepostDTO): Promise<Repost> {
-		const repost = await this.repostService.createRepost(payload);
-		return repost;
+	async createPost(@Body() payload: ICreateRepostDTO) {
 	}
 }
 

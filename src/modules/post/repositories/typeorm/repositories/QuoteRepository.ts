@@ -14,10 +14,6 @@ class QuoteRepository implements IQuoteRepository {
 		private quoteRepository: Repository<Quote>
 	) { }
 
-	public create(data: ICreateQuotetDTO): Quote {
-		return this.quoteRepository.create(data);
-	}
-
 	public save(quote: Quote): Promise<Quote> {
 		return this.quoteRepository.save(quote);
 	}

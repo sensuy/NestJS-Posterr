@@ -48,9 +48,6 @@ class User {
 	@OneToMany(() => Post, (post) => post.user)
 	posts: Post[];
 
-	@OneToMany(() => Repost, (repost) => repost.user)
-	reposts: Repost[];
-
 	@OneToMany(() => Quotes, (quote) => quote.user)
 	quotes: Quotes[];
 }

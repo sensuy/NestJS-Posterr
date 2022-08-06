@@ -31,9 +31,7 @@ class QuoteController {
 	@ApiConflictResponse({ description: 'User does not exist.' })
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@UsePipes(new JoiValidationPipe(CreateQuoteSchema))
-	async createPost(@Body() payload: ICreateQuotetDTO): Promise<Quote> {
-		const repost = await this.quoteService.createQuote(payload);
-		return repost;
+	async createPost(@Body() payload: ICreateQuotetDTO) {
 	}
 }
 

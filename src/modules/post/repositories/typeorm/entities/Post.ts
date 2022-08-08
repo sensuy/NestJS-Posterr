@@ -5,13 +5,11 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
-	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
-import Quotes from './Quote';
-import Repost from './Repost';
-import Quote from './Quote';
 
 @Entity('post')
 class Post {
@@ -36,7 +34,7 @@ class Post {
 		type: 'string',
 		example: 'It is a beautiful day!',
 	})
-	@Column({type: 'varchar', length: 777})
+	@Column({ type: 'varchar', length: 777 })
 	content: string;
 
 	@ApiProperty({
@@ -51,14 +49,30 @@ class Post {
 	@JoinColumn({ name: 'fk_userid' })
 	user: User;
 
-	@OneToMany(() => Repost, (repost) => repost.postFk, { nullable: false })
-	post: Repost[];
 
-	@OneToMany(() => Repost, (repost) => repost.repostFk, { nullable: false })
-	reposts: Repost[];
+	@ManyToMany(() => Post, { cascade: true })
+	@JoinTable({
+		name: 'repost',
+		joinColumn: {
+			name: 'repostid',
+		},
+		inverseJoinColumn: {
+			name: 'postid',
+		}
+	})
+	reposts: Post[];
 
-	@OneToMany(() => Quote, (quote) => quote.post, { nullable: false })
-	quotes: Repost[];
+	@ManyToMany(() => Post, { cascade: true })
+	@JoinTable({
+		name: 'quote',
+		joinColumn: {
+			name: 'quoteid',
+		},
+		inverseJoinColumn: {
+			name: 'postid',
+		}
+	})
+	quotes: Post[];
 }
 
 export default Post;

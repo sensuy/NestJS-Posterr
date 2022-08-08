@@ -33,11 +33,9 @@ class PostRepository implements IPostRepository {
 			.getCount();
 	}
 
-	verifyPostId(id: string): Promise<Post> {
+	verifyRepostById(postid: string): Promise<Post> {
 		return this.postRepository.findOne({
-			where: {
-				postid: id
-			},
+			where: { postid },
 			relations: {
 				reposts: true
 			}

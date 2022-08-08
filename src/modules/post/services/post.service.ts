@@ -50,19 +50,18 @@ class PostService {
 			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
 		}
 
-
-		const result = await this.postRepository.verifyPostId(payload.postid);
-		console.log({ result });
-
-		const post = await this.postRepository.listById(payload.postid);
-
-		if (post.fkUserId === payload.userid) {
-			throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
-		}
-			
+		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {
 			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
+		}
+
+		if (post.reposts.length >= 1) {
+			throw new HttpException('You can not repost a repost', HttpStatus.FORBIDDEN);
+		}
+
+		if (post.fkUserId === payload.userid) {
+			throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
 		}
 
 		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
@@ -90,7 +89,7 @@ class PostService {
 			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
-		return result;
+		return post;
 
 	}
 

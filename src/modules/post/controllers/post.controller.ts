@@ -40,7 +40,7 @@ class PostController {
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
 	@ApiNotFoundResponse({ description: 'User does not exist.  |  Post does not exist.' })
-	@ApiForbiddenResponse({ description: 'You have reached the limit of posts per day. | You cannot repost your own post.' })
+	@ApiForbiddenResponse({description: 'You can not repost your own post. | You have reached the limit of posts per day | You cannot repost your own post' })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createRepost(@Body() payload: ICreateRepostDTO): Promise<PostResposnse> {
 		const post = await this.postService.repost(payload);

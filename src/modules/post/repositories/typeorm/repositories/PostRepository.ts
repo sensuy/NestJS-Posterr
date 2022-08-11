@@ -41,6 +41,15 @@ class PostRepository implements IPostRepository {
 			}
 		});
 	}
+
+	verifyQuoteById(postid: string): Promise<Post> {
+		return this.postRepository.findOne({
+			where: { postid },
+			relations: {
+				quotes: true
+			}
+		});
+	}
 }
 
 export default PostRepository;

@@ -13,5 +13,5 @@ export const CreateRepostSchema = Joi.object({
 export const CreateQuoteSchema = Joi.object({
 	userid: Joi.string().uuid().required(),
 	postid: Joi.string().uuid().required(),
-	content: Joi.string().max(777).required()
+	content: Joi.string().max(140).required()
 })

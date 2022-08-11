@@ -10,10 +10,11 @@ import {
 } from "@nestjs/swagger";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import PostResposnse from "../repositories/typeorm/entities/Post";
-import { CreatePostSchema, CreateRepostSchema } from "../schemas/post.schema";
+import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema } from "../schemas/post.schema";
 import PostService from "../services/post.service";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
+import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
 
 @ApiTags('Post')
 @Controller()
@@ -40,12 +41,25 @@ class PostController {
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
 	@ApiNotFoundResponse({ description: 'User does not exist.  |  Post does not exist.' })
-	@ApiForbiddenResponse({description: 'You can not repost your own post. | You have reached the limit of posts per day | You cannot repost your own post' })
+	@ApiForbiddenResponse({description: 'You can not repost your own post. | You have reached the limit of posts per day | You can not repost a repost' })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createRepost(@Body() payload: ICreateRepostDTO): Promise<PostResposnse> {
-		const post = await this.postService.repost(payload);
-		return post;
+		const repost = await this.postService.repost(payload);
+		return repost;
+	}
+
+	@Post('quote')
+	@ApiOperation({ summary: 'Quote a post/repost.' })
+	@ApiCreatedResponse({ description: 'Post sucessfully created.', type: PostResposnse })
+	@ApiBadRequestResponse({ description: 'Validation failed.' })
+	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
+	@ApiNotFoundResponse({ description: 'User does not exist.  |  Post does not exist.' })
+	@ApiForbiddenResponse({description: 'You cannot quote your own post. | You have reached the limit of posts per day | You can not quote a quote' })
+	@UsePipes(new JoiValidationPipe(CreateQuoteSchema))
+	async createQuote(@Body() payload: ICreateQuoteDTO): Promise<PostResposnse> {
+		const quote = await this.postService.quote(payload);
+		return quote;
 	}
 }
 
-export default PostController
+export default PostController;

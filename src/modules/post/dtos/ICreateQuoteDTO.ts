@@ -1,18 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-class ICreateQuotetDTO {
+class ICreateQuoteDTO {
 	@ApiProperty({
-		description: 'Id of the user',
+		description: 'User\'s id',
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
 	})
-	fkUserId: string;
+	userid: string;
 	@ApiProperty({
-		description: 'Id of the post',
+		description: 'Id of the post/Repost',
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
 	})
-	fkPostId: string;
+	postid: string;
 	@ApiProperty({
 		description: 'Content of the quote',
 		type: 'string',
@@ -21,4 +21,4 @@ class ICreateQuotetDTO {
 	content: string;
 }
 
-export default ICreateQuotetDTO;
+export default ICreateQuoteDTO;

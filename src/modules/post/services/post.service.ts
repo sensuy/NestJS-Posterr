@@ -5,6 +5,7 @@ import IUserRepository from "modules/user/repositories/IUserRepository";
 import DateFormatService from "shared/utils/date-format.service";
 import Post from "../repositories/typeorm/entities/Post";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
+import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
 
 
 @Injectable()
@@ -45,6 +46,8 @@ class PostService {
 	}
 
 	async repost(payload: ICreateRepostDTO): Promise<Post> {
+		console.log({ payload });
+
 		const user = await this.userRepository.listById(payload.userid);
 		if (!user) {
 			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
@@ -89,8 +92,55 @@ class PostService {
 			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
-		return post;
+		return repost;
+	}
 
+	async quote(payload: ICreateQuoteDTO): Promise<Post> {
+		
+		const user = await this.userRepository.listById(payload.userid);
+		if (!user) {
+			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
+		}
+
+		const post = await this.postRepository.verifyQuoteById(payload.postid);
+	
+		if (!post) {
+			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
+		}
+
+		if (post.quotes.length >= 1) {
+			throw new HttpException('You can not quote a quote', HttpStatus.FORBIDDEN);
+		}
+
+		if (post.fkUserId === payload.userid) {
+			throw new HttpException('You cannot quote your own post', HttpStatus.FORBIDDEN);
+		}
+
+		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
+
+		const count = await this.postRepository.countUserPostByDate(payload.userid, initDate, finalDate);
+
+		if (count >= 5) {
+			throw new HttpException('You have reached the limit of posts per day', HttpStatus.FORBIDDEN);
+		}
+
+		const quotePayload: ICreatePostDTO = {
+			fkUserId: payload.userid,
+			content: payload.content
+		};
+
+		let quote = this.postRepository.create(quotePayload);
+		quote.quotes = [post];
+
+		try {
+			[quote,] = await Promise.all([
+				this.postRepository.save(quote),
+				this.userRepository.incrementInteractions(payload.userid)
+			]);
+		} catch (error) {
+			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+		return quote;
 	}
 
 

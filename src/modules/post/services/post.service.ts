@@ -14,29 +14,14 @@ class PostService {
 	constructor(
 		@Inject('IPostRepository') private postRepository: IPostRepository,
 		@Inject('IUserRepository') private userRepository: IUserRepository,
-		private dateFormatService: DateFormatService
 	) { }
 
 	async createPost(payload: ICreatePostDTO): Promise<Post> {
-
-		const user = await this.userRepository.listById(payload.fkUserId);
-		if (!user) {
-			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-		}
-
-		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
-
-		const count = await this.postRepository.countUserPostByDate(payload.fkUserId, initDate, finalDate);
-
-		if (count >= 5) {
-			throw new HttpException('You have reached the limit of posts per day', HttpStatus.FORBIDDEN);
-		}
-
 		let post = this.postRepository.create(payload);
 		try {
 			[post,] = await Promise.all([
 				this.postRepository.save(post),
-				this.userRepository.incrementInteractions(payload.fkUserId)
+				this.userRepository.incrementInteractions(payload.userid)
 			]);
 		} catch (error) {
 			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
@@ -46,13 +31,6 @@ class PostService {
 	}
 
 	async repost(payload: ICreateRepostDTO): Promise<Post> {
-		console.log({ payload });
-
-		const user = await this.userRepository.listById(payload.userid);
-		if (!user) {
-			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-		}
-
 		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {
@@ -63,20 +41,12 @@ class PostService {
 			throw new HttpException('You can not repost a repost', HttpStatus.FORBIDDEN);
 		}
 
-		if (post.fkUserId === payload.userid) {
+		if (post.userid === payload.userid) {
 			throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
 		}
 
-		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
-
-		const count = await this.postRepository.countUserPostByDate(payload.userid, initDate, finalDate);
-
-		if (count >= 5) {
-			throw new HttpException('You have reached the limit of posts per day', HttpStatus.FORBIDDEN);
-		}
-
 		const repostPayload: ICreatePostDTO = {
-			fkUserId: payload.userid,
+			userid: payload.userid,
 			content: ''
 		};
 
@@ -89,19 +59,13 @@ class PostService {
 				this.userRepository.incrementInteractions(payload.userid)
 			]);
 		} catch (error) {
-			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+			throw new HttpException('Repost creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
 		return repost;
 	}
 
 	async quote(payload: ICreateQuoteDTO): Promise<Post> {
-		
-		const user = await this.userRepository.listById(payload.userid);
-		if (!user) {
-			throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-		}
-
 		const post = await this.postRepository.verifyQuoteById(payload.postid);
 	
 		if (!post) {
@@ -112,20 +76,12 @@ class PostService {
 			throw new HttpException('You can not quote a quote', HttpStatus.FORBIDDEN);
 		}
 
-		if (post.fkUserId === payload.userid) {
+		if (post.userid === payload.userid) {
 			throw new HttpException('You cannot quote your own post', HttpStatus.FORBIDDEN);
 		}
 
-		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
-
-		const count = await this.postRepository.countUserPostByDate(payload.userid, initDate, finalDate);
-
-		if (count >= 5) {
-			throw new HttpException('You have reached the limit of posts per day', HttpStatus.FORBIDDEN);
-		}
-
 		const quotePayload: ICreatePostDTO = {
-			fkUserId: payload.userid,
+			userid: payload.userid,
 			content: payload.content
 		};
 
@@ -138,7 +94,7 @@ class PostService {
 				this.userRepository.incrementInteractions(payload.userid)
 			]);
 		} catch (error) {
-			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+			throw new HttpException('Quote creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 		return quote;
 	}

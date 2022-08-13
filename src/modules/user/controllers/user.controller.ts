@@ -42,9 +42,10 @@ class UserController {
 	@ApiOkResponse({ description: 'User sucessfully found.', type: [User] })
 	@ApiBadRequestResponse({ description: 'Name invalid' })
 	@ApiNotFoundResponse({ description: 'User not found.' })
+	@ApiServiceUnavailableResponse({ description: 'User could not be found.' })
 	@UsePipes(new JoiValidationPipe(FindUserSchema))
 	async listByName(@Param('name') name: string): Promise<User> {
-		const users = await this.userService.findUser(name);
+		const users = await this.userService.findUserByName(name);
 		return users;
 	}
 }

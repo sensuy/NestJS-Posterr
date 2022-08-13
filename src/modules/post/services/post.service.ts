@@ -6,6 +6,7 @@ import DateFormatService from "shared/utils/date-format.service";
 import Post from "../repositories/typeorm/entities/Post";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
 import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
+import IPagination from "shared/interfaces/IPagination";
 
 
 @Injectable()
@@ -15,6 +16,12 @@ class PostService {
 		@Inject('IPostRepository') private postRepository: IPostRepository,
 		@Inject('IUserRepository') private userRepository: IUserRepository,
 	) { }
+
+	async listLatestPosts({ limit, offset }: IPagination): Promise<Post[]> {
+		const posts = await this.postRepository.listLatestPosts(limit, offset);
+		
+		return posts;
+	}
 
 	async createPost(payload: ICreatePostDTO): Promise<Post> {
 		let post = this.postRepository.create(payload);
@@ -30,7 +37,7 @@ class PostService {
 		return post;
 	}
 
-	async repost(payload: ICreateRepostDTO): Promise<Post> {
+	async creatRepost(payload: ICreateRepostDTO): Promise<Post> {
 		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {
@@ -65,7 +72,7 @@ class PostService {
 		return repost;
 	}
 
-	async quote(payload: ICreateQuoteDTO): Promise<Post> {
+	async createQuote(payload: ICreateQuoteDTO): Promise<Post> {
 		const post = await this.postRepository.verifyQuoteById(payload.postid);
 	
 		if (!post) {

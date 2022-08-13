@@ -25,6 +25,18 @@ class PostRepository implements IPostRepository {
 		return this.postRepository.findOneBy({ postid });
 	}
 
+	listLatestPosts(limit: number, offset: number): Promise<Post[]> {
+		return this.postRepository.find({
+			take: limit,
+			skip: offset,
+			order: { createdAt: 'DESC' },
+			relations: {
+				reposts: true,
+				quotes: true,
+			},
+		});
+	}
+
 	countUserPostByDate(fkUserId: string, init: Date, final: Date): Promise<number> {
 		return this.postRepository
 			.createQueryBuilder()

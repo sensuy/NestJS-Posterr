@@ -6,6 +6,7 @@ interface IPostRepository {
   create(data: ICreatePostDTO): Post;
   save(post: Post): Promise<Post>;
   listById(postid: string): Promise<Post | null>;
+  listLatestPosts(limit: number, offset: number): Promise<Post[]>;
   verifyRepostById(postid: string): Promise<Post | null>;
   verifyQuoteById(quoteId: string): Promise<Post | null>;
   countUserPostByDate(fkUserId: string, init: Date, final: Date): Promise<number>;

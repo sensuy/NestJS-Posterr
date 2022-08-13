@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import PostRepository from "../repositories/typeorm/repositories/PostRepository";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import Post from "../repositories/typeorm/entities/Post";
 import IPostRepository from "../repositories/IPostRepository";
@@ -11,7 +10,6 @@ class PostService {
 	constructor(
 		@Inject('IPostRepository') private postRepository: IPostRepository
 	) { }
-
 
 	async createPost(payload: ICreatePostDTO): Promise<Post> {
 		let post = this.postRepository.create(payload);

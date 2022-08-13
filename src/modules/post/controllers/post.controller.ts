@@ -13,7 +13,7 @@ class PostController {
 	constructor(private postService: PostService) { }
 
 	@Post()
-	@ApiOperation({ summary: 'Create a new Poster' })
+	@ApiOperation({ summary: 'Create a new post.' })
 	@ApiCreatedResponse({ description: 'Post sucessfully created.', type: PostResposnse })
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })

@@ -7,18 +7,22 @@ import Post from '../entities/Post';
 
 @Injectable()
 class PostRepository implements IPostRepository {
-	
+
 	constructor(
 		@InjectRepository(Post)
 		private postRepository: Repository<Post>
 	) { }
 
-	public create(post: ICreatePostDTO): Post {
-		return this.postRepository.create(post);
+	public create(data: ICreatePostDTO): Post {
+		return this.postRepository.create(data);
 	}
 
 	public save(post: Post): Promise<Post> {
 		return this.postRepository.save(post);
+	}
+
+	listById(postid: string): Promise<Post> {
+		return this.postRepository.findOne({ where: { postid } });
 	}
 }
 

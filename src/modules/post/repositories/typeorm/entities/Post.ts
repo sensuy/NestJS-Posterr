@@ -5,12 +5,11 @@ import {
 	CreateDateColumn,
 	Entity,
 	JoinColumn,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
-	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
-import Quotes from './Quote';
-import Repost from './Repost';
 
 @Entity('post')
 class Post {
@@ -27,15 +26,15 @@ class Post {
 		type: 'uuid',
 		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 	})
-	@Column({ name: 'fk_iduser' })
-	fkIdUser: string;
+	@Column({ name: 'fk_userid' })
+	fkUserId: string;
 
 	@ApiProperty({
 		description: "Typed content of the post",
 		type: 'string',
 		example: 'It is a beautiful day!',
 	})
-	@Column({type: 'varchar', length: 777})
+	@Column({ type: 'varchar', length: 777 })
 	content: string;
 
 	@ApiProperty({
@@ -50,11 +49,30 @@ class Post {
 	@JoinColumn({ name: 'fk_userid' })
 	user: User;
 
-	@OneToMany(() => Repost, (repost) => repost.post)
-	repost: Repost[];
 
-	@OneToMany(() => Quotes, (quote) => quote.post)
-	quote: Quotes[];
+	@ManyToMany(() => Post, { cascade: true })
+	@JoinTable({
+		name: 'repost',
+		joinColumn: {
+			name: 'repostid',
+		},
+		inverseJoinColumn: {
+			name: 'postid',
+		}
+	})
+	reposts: Post[];
+
+	@ManyToMany(() => Post, { cascade: true })
+	@JoinTable({
+		name: 'quote',
+		joinColumn: {
+			name: 'quoteid',
+		},
+		inverseJoinColumn: {
+			name: 'postid',
+		}
+	})
+	quotes: Post[];
 }
 
 export default Post;

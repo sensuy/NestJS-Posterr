@@ -2,11 +2,10 @@ import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from "../repositories/IPostRepository";
 import IUserRepository from "modules/user/repositories/IUserRepository";
-import DateFormatService from "shared/utils/date-format.service";
 import Post from "../repositories/typeorm/entities/Post";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
 import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
-import IPagination from "shared/interfaces/IPagination";
+import { IPaginationByDate } from "shared/interfaces/IPagination";
 
 
 @Injectable()
@@ -17,9 +16,29 @@ class PostService {
 		@Inject('IUserRepository') private userRepository: IUserRepository,
 	) { }
 
-	async listLatestPosts({ limit, offset }: IPagination): Promise<Post[]> {
-		const posts = await this.postRepository.listLatestPosts(limit, offset);
-		
+	
+	async listUserPosts(userid: string, qureryParams: IPaginationByDate): Promise<Post[]> {
+		let posts: Post[];
+		try {
+			posts = await this.postRepository.listPostsByUserId(userid, qureryParams);
+		} catch (error) {
+			console.log(error);
+			throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+
+		return posts;
+	}
+
+	async listLatestPosts(qureryParams: IPaginationByDate): Promise<Post[]> {
+		let posts: Post[];
+		try {
+			posts = await this.postRepository.listLatestPosts(qureryParams);
+		} catch (error) {
+			console.log(error);
+			
+			throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+
 		return posts;
 	}
 
@@ -74,7 +93,7 @@ class PostService {
 
 	async createQuote(payload: ICreateQuoteDTO): Promise<Post> {
 		const post = await this.postRepository.verifyQuoteById(payload.postid);
-	
+
 		if (!post) {
 			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
 		}

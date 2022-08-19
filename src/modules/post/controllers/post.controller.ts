@@ -46,8 +46,7 @@ class PostController {
 		startDate = new Date(startDate);
 		endDate = this.dateFormatService.addDays(endDate, 1);
 		Object.assign(queryParams, { startDate, endDate });
-		const posts = await this.postService.listUserPosts(userid, queryParams);
-		return posts;
+		return this.postService.listUserPosts(userid, queryParams);
 	}
 
 	@Get('post')
@@ -64,8 +63,7 @@ class PostController {
 		startDate = new Date(startDate);
 		endDate = this.dateFormatService.addDays(endDate, 1);
 		Object.assign(queryParams, { startDate, endDate });
-		const posts = await this.postService.listLatestPosts(queryParams);
-		return posts;
+		return this.postService.listLatestPosts(queryParams);
 	}
 
 	@Post('post')
@@ -80,8 +78,7 @@ class PostController {
 	@ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
 	@UsePipes(new JoiValidationPipe(CreatePostSchema))
 	async createPost(@Body() payload: ICreatePostDTO): Promise<PostResposnse> {
-		const post = await this.postService.createPost(payload);
-		return post;
+		return this.postService.createPost(payload);
 	}
 
 	@Post('repost')
@@ -93,8 +90,7 @@ class PostController {
 	@ApiForbiddenResponse({ description: `You can not repost your own post. | You have reached the limit of posts per day | You can not repost a repost` })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createRepost(@Body() payload: ICreateRepostDTO): Promise<PostResposnse> {
-		const repost = await this.postService.creatRepost(payload);
-		return repost;
+		return this.postService.creatRepost(payload);
 	}
 
 	@Post('quote')
@@ -106,8 +102,7 @@ class PostController {
 	@ApiForbiddenResponse({ description: 'You cannot quote your own post. | You have reached the limit of posts per day | You can not quote a quote' })
 	@UsePipes(new JoiValidationPipe(CreateQuoteSchema))
 	async createQuote(@Body() payload: ICreateQuoteDTO): Promise<PostResposnse> {
-		const quote = await this.postService.createQuote(payload);
-		return quote;
+		return this.postService.createQuote(payload);
 	}
 }
 

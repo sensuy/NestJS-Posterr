@@ -42,10 +42,6 @@ class PostController {
 		@Param() useridParam: IUserId
 	): Promise<PostResposnse[]> {
 		const { userid } = useridParam;
-		let { startDate, endDate } = queryParams;
-		startDate = new Date(startDate);
-		endDate = this.dateFormatService.addDays(endDate, 1);
-		Object.assign(queryParams, { startDate, endDate });
 		return this.postService.listUserPosts(userid, queryParams);
 	}
 
@@ -59,10 +55,6 @@ class PostController {
 	@ApiBadRequestResponse({ description: 'Validation failed.' })
 	@UsePipes(new JoiValidationPipe(PaginationSchema))
 	async getLatestPosts(@Query() queryParams: IPaginationByDate): Promise<PostResposnse[]> {
-		let { startDate, endDate } = queryParams;
-		startDate = new Date(startDate);
-		endDate = this.dateFormatService.addDays(endDate, 1);
-		Object.assign(queryParams, { startDate, endDate });
 		return this.postService.listLatestPosts(queryParams);
 	}
 

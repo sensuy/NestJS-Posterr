@@ -6,6 +6,7 @@ import Post from "../repositories/typeorm/entities/Post";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
 import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
 import { IPaginationByDate } from "shared/interfaces/IPagination";
+import DateFormatService from "shared/utils/date-format.service";
 
 
 @Injectable()
@@ -14,13 +15,24 @@ class PostService {
 	constructor(
 		@Inject('IPostRepository') private postRepository: IPostRepository,
 		@Inject('IUserRepository') private userRepository: IUserRepository,
+		private dateFormatService: DateFormatService
 	) { }
 
-	
-	async listUserPosts(userid: string, qureryParams: IPaginationByDate): Promise<Post[]> {
+
+	async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
+		if (queryParams.startDate) {
+			const startDate = new Date(queryParams.startDate);
+			Object.assign(queryParams, { startDate });
+		}
+
+		if (queryParams.endDate) {
+			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+			Object.assign(queryParams, { endDate });
+		}
+
 		let posts: Post[];
 		try {
-			posts = await this.postRepository.listPostsByUserId(userid, qureryParams);
+			posts = await this.postRepository.listPostsByUserId(userid, queryParams);
 		} catch (error) {
 			console.log(error);
 			throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
@@ -29,13 +41,24 @@ class PostService {
 		return posts;
 	}
 
-	async listLatestPosts(qureryParams: IPaginationByDate): Promise<Post[]> {
+	async listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
+
+		if (queryParams.startDate) {
+			const startDate = new Date(queryParams.startDate);
+			Object.assign(queryParams, { startDate });
+		}
+
+		if (queryParams.endDate) {
+			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+			Object.assign(queryParams, { endDate });
+		}
+
 		let posts: Post[];
 		try {
-			posts = await this.postRepository.listLatestPosts(qureryParams);
+			posts = await this.postRepository.listLatestPosts(queryParams);
 		} catch (error) {
 			console.log(error);
-			
+
 			throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 

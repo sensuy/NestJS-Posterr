@@ -28,6 +28,8 @@ class PostRepository implements IPostRepository {
 
 
 	listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
+		console.log({ queryParams });
+
 		const { limit, page, startDate, endDate } = queryParams;
 		let query = this.postRepository.createQueryBuilder('post')
 			.leftJoinAndSelect('post.reposts', 'repost')

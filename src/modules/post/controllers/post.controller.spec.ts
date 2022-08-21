@@ -1,5 +1,4 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { start } from "repl";
 import DateFormatService from "shared/utils/date-format.service";
 import PostService from "../services/post.service";
 import PostController from "./post.controller"
@@ -16,11 +15,18 @@ describe('Testing post controller', () => {
 	const mockPostService = {
 		createPost: jest.fn(dto => {
 			return {
-				postid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
+				postid: '613711df-713d-4e1d-b778-9124ce7a08b1',
 				...dto,
 				created_at: new Date()
 			}
 		}),
+		createRepost: jest.fn(dto => {
+			return {
+				postid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
+				...dto,
+				created_at: new Date()
+			}
+		})
 	}
 
 	beforeEach(async () => {
@@ -41,9 +47,19 @@ describe('Testing post controller', () => {
 		expect(controller).toBeDefined();
 	});
 
-	it('should return a created posts', async () => {
+	it('should be able to created a posts', async () => {
 		const post = await controller.createPost({ userid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a', content: 'test' });
 		expect(post).toEqual({
+			postid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
+			userid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
+			content: 'test',
+			created_at: expect.any(Date)
+		});
+	});
+
+	it.only('Should be to create a repost', async () => {
+		const repost = await controller.createRepost({ userid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a', postid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a' });
+		expect(repost).toEqual({
 			postid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 			userid: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a',
 			content: 'test',

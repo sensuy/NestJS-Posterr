@@ -25,8 +25,7 @@ import DateFormatService from "shared/utils/date-format.service";
 class PostController {
 
 	constructor(
-		private postService: PostService,
-		private dateFormatService: DateFormatService
+		private postService: PostService
 	) { }
 
 	@Get('post/:userid')
@@ -82,7 +81,7 @@ class PostController {
 	@ApiForbiddenResponse({ description: `You can not repost your own post. | You have reached the limit of posts per day | You can not repost a repost` })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
 	async createRepost(@Body() payload: ICreateRepostDTO): Promise<PostResposnse> {
-		return this.postService.creatRepost(payload);
+		return this.postService.createRepost(payload);
 	}
 
 	@Post('quote')

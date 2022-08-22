@@ -79,7 +79,7 @@ class PostService {
 		return post;
 	}
 
-	async creatRepost(payload: ICreateRepostDTO): Promise<Post> {
+	async createRepost(payload: ICreateRepostDTO): Promise<Post> {
 		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {

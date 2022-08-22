@@ -12,8 +12,9 @@ export class PostVerificationMiddleware implements NestMiddleware {
 
 	async use(req: Request, res: Response, next: NextFunction) {
 		const {userid} = req.body;
-		const [initDate, finalDate] = this.dateFormatService.datesToFilterTimestampByDate(new Date());
-
+		const initDate = this.dateFormatService.timesTampZeroHour(new Date());
+		const finalDate = this.dateFormatService.addDays(initDate, 1);
+		
 		const count = await this.postRepository.countUserPostByDate(userid, initDate, finalDate);
 
 		if (count >= 5) {

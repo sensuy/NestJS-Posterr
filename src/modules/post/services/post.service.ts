@@ -2,10 +2,11 @@ import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from "../repositories/IPostRepository";
 import IUserRepository from "modules/user/repositories/IUserRepository";
-import DateFormatService from "shared/utils/date-format.service";
 import Post from "../repositories/typeorm/entities/Post";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
 import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
+import { IPaginationByDate } from "shared/interfaces/IPagination";
+import DateFormatService from "shared/utils/date-format.service";
 
 
 @Injectable()
@@ -14,7 +15,55 @@ class PostService {
 	constructor(
 		@Inject('IPostRepository') private postRepository: IPostRepository,
 		@Inject('IUserRepository') private userRepository: IUserRepository,
+		private dateFormatService: DateFormatService
 	) { }
+
+
+	async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
+		if (queryParams.startDate) {
+			const startDate = new Date(queryParams.startDate);
+			Object.assign(queryParams, { startDate });
+		}
+
+		if (queryParams.endDate) {
+			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+			Object.assign(queryParams, { endDate });
+		}
+
+		let posts: Post[];
+		try {
+			posts = await this.postRepository.listPostsByUserId(userid, queryParams);
+		} catch (error) {
+			console.log(error);
+			throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+
+		return posts;
+	}
+
+	async listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
+
+		if (queryParams.startDate) {
+			const startDate = new Date(queryParams.startDate);
+			Object.assign(queryParams, { startDate });
+		}
+
+		if (queryParams.endDate) {
+			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+			Object.assign(queryParams, { endDate });
+		}
+
+		let posts: Post[];
+		try {
+			posts = await this.postRepository.listLatestPosts(queryParams);
+		} catch (error) {
+			console.log(error);
+
+			throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+		}
+
+		return posts;
+	}
 
 	async createPost(payload: ICreatePostDTO): Promise<Post> {
 		let post = this.postRepository.create(payload);
@@ -30,7 +79,7 @@ class PostService {
 		return post;
 	}
 
-	async repost(payload: ICreateRepostDTO): Promise<Post> {
+	async createRepost(payload: ICreateRepostDTO): Promise<Post> {
 		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {
@@ -65,9 +114,9 @@ class PostService {
 		return repost;
 	}
 
-	async quote(payload: ICreateQuoteDTO): Promise<Post> {
+	async createQuote(payload: ICreateQuoteDTO): Promise<Post> {
 		const post = await this.postRepository.verifyQuoteById(payload.postid);
-	
+
 		if (!post) {
 			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
 		}

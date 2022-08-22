@@ -78,6 +78,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Redis as microservice.
 - Midlewares para verficar post original e users!
 - Midlewares para contar a soma dos posts, reposts e quotes.
+- Utilizar o id no header./ listar post por id não está validando o usuário.
 
 
 ## License

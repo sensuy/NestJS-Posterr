@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import Post from "../repositories/typeorm/entities/Post";
 
 class ICreateRepostDTO {
 	@ApiProperty({

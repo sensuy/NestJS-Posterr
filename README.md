@@ -1,66 +1,4 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Anotações a serem feitas
 
@@ -84,6 +22,74 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+# Node.js Challenge
+
+## About the api-service
+  When structuring the application I used the module structure. Database entities very close to each other are in the same module. That way the project can scale without getting cluttered.
+
+  As in this project we only have four database entities: User, post, repost and quote they are in the same module: the user module.
+```
+api-service
+├── node_modules
+├── src
+    └── configs     
+    └── modules
+      └── post
+        ├── controllers  // Request and responses and parse data
+        ├── dtos  
+        ├── middlewares  // Intercepts requests and responses and performs validations. 
+        ├── repositories // ORM
+        ├── schemas  // Third party library
+        ├── services // Business ruless
+		└──  post.module.ts
+	  └── user
+    └── shared
+      ├── interfaces 
+      ├── middlewares  
+      ├── migrations  
+      └── utils
+    ├── app.module.ts
+    ├── main.ts
+```
+Inside the modules, responsibilities were uncoupled as much as possible. For example, the services that run the business rules don't know which ORM(Typeorm) the repository layer is using. With this approach, an ORM or library replacement becomes less complicated.
+
+In the shared folder are what will be common to more than one module. For example the interface "IPagination.ts" will definitely be used in future new modules, to check the validity of the JWT token. As well as the provider that is responsible for sending email.
+
+
+### Run posterr
+  After cloning the project, follow the steps below.
+- In the project root folder there is a `docker-compose.yaml` file. If you don't have any postgres instance     installed open a terminal and execute:
+  ```sh
+  docker-compose up
+  ```
+  the password and username will be `postgres`, and the available port will be the default `5432`. after that close the terminal and open a new one in the root folder.
+
+- Access the `api-service` folder, in the root of this folder there is a `.env.example` file. Copy paste and rename the copy to .env.
+- In this file we will configure some environment variables. Fill it with your `JWT secret` and `token expiration`.
+
+  ```sh
+  #jwt configuration
+  JWT_SECRET: "your secret"
+  JWT_EXPIRESIN: "1d"
+
+  #Data base options
+  DB_HOST: "localhost"
+  DB_USERNAME: "postgres"
+  DB_PASSWORD: "postgres"
+  DB_DATABASE: "your database"
+  ```
+- If you are already using a `postgres` instance on port `5432`, put the `username`, `password` and `host` in the `.env`.
+- Fill the `DB_DATABASE` field with the name you want. `Sequelize` will create it automatically when running migrations.
+-Now install the dependencies with or with an `npm install`/`yarn`.
+-Run migrations with the command `npm run migrations`/`yarn migrations`.
+-Now you can run api service: `npm run start`/`yarn start`. The api-service will run on port `3001`.
+-To see the swagger documentation go to `http://localhost:3001/api-docs/`. Just use it after run the stock-service. 
+
+## Run stock-service
+- Access the `stock-service` folder, and install the dependecies `npm install`/`yarn`.
+-Run the service: `npm run start`/`yarn start`. The stock-service will run on port `3002`.
 
 ## Migration commands
 ```bash

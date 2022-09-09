@@ -11,7 +11,7 @@ import {
 } from "@nestjs/swagger";
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import PostResposnse from "../repositories/typeorm/entities/Post";
-import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema, PaginationSchema } from "../schemas/post.schema";
+import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema, PaginationSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import ICreateRepostDTO from "../dtos/ICreateRepostDTO";

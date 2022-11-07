@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, MoreThan, QueryBuilder, Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository } from 'typeorm';
 import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from '../../IPostRepository';
 import Post from '../entities/Post';

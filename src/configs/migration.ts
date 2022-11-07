@@ -6,7 +6,7 @@ config();
 
 const configService = new ConfigService();
 
-export const connectionSource = new DataSource({
+export const migrationConfig = new DataSource({
 	migrationsTableName: 'migrations',
 	type: 'postgres',
 	host: configService.get<string>('DATABASE_HOST'),

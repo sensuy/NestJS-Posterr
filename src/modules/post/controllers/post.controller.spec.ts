@@ -7,10 +7,6 @@ import { CreatePostSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import PostController from "./post.controller"
 
-
-
-
-
 describe('Testing PostController', () => {
   let controller: PostController;
 

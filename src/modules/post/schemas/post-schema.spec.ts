@@ -40,7 +40,8 @@ describe('Validate CreatePostSchema', () => {
       userid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
       content
     };
-    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"content" length must be less than or equal to 777 characters long');
+    expect(() => validatePipe.transform(dto, { type: "body" }))
+      .toThrowError('"content" length must be less than or equal to 777 characters long');
   });
 });
 

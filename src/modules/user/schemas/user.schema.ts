@@ -1,10 +1,8 @@
 import * as Joi from 'joi';
 
-
 export const SeedUserSchema = Joi.array().items(
 	Joi.object({
 		userName: Joi.string().alphanum().max(14).required(),
-		interactions: Joi.number().valid(0).required(),
 	}));
 
 export const FindUserSchema = Joi.string().max(14).required()

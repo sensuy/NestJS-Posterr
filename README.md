@@ -17,7 +17,7 @@
 - Midlewares para verficar post original e users!
 - Midlewares para contar a soma dos posts, reposts e quotes.
 - Utilizar o id no header./ listar post por id não está validando o usuário.
-
+- Escolher o Joi pois ele possui maior nota no snky de segurança, optar por essas bibliotecas.
 
 ## License
 

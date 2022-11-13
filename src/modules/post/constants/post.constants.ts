@@ -1,0 +1,1 @@
+export const MAX_POST_CHARACTERS = 777;

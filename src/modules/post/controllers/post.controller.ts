@@ -58,15 +58,15 @@ class PostController {
 	}
 
 	@Post('post')
-	@ApiOperation({ summary: 'Create a new post.' })
-	@ApiCreatedResponse({
-		description: 'Post sucessfully created.',
-		type: PostResposnse
-	})
-	@ApiBadRequestResponse({ description: 'Validation failed.' })
-	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
-	@ApiNotFoundResponse({ description: 'User does not exist.' })
-	@ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
+	// @ApiOperation({ summary: 'Create a new post.' })
+	// @ApiCreatedResponse({
+	// 	description: 'Post sucessfully created.',
+	// 	type: PostResposnse
+	// })
+	// @ApiBadRequestResponse({ description: 'Validation failed.' })
+	// @ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
+	// @ApiNotFoundResponse({ description: 'User does not exist.' })
+	// @ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
 	@UsePipes(new JoiValidationPipe(CreatePostSchema))
 	async createPost(@Body() payload: ICreatePostDTO): Promise<PostResposnse> {
 		return this.postService.createPost(payload);

@@ -1,18 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import Post from "../repositories/typeorm/entities/Post";
 
-class ICreateRepostDTO {
-	@ApiProperty({
-		description: 'The post that will be reposted',
-		type: 'uuid',
-		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
-	})
-	postid: string;
-	@ApiProperty({
-		description: 'The user that will do repost',
-		type: 'uuid',
-		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
-	})
-	userid: string;
-}
+class ICreateRepostDTO extends PickType(Post, ['userid', 'postid']){}
 
 export default ICreateRepostDTO;

@@ -1,18 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { PickType } from "@nestjs/swagger";
+import Post from "../repositories/typeorm/entities/Post";
 
-class ICreatePostDTO {
-	@ApiProperty({
-		description: 'Id of the user',
-		type: 'uuid',
-		example: 'f0a0a0a0-a0a0-0a0a-0a0a-0a0a0a0a0a0a'
-	})
-	userid: string;
-	@ApiProperty({
-		description: 'Content of the post',
-		type: 'string',
-		example: "It's a beautiful day!"
-	})
-	content: string;
-}
+class ICreatePostDTO extends PickType(Post, ['userid', 'content']){}
 
 export default ICreatePostDTO;

@@ -1,46 +1,25 @@
 import * as Joi from 'joi';
-import { MAX_POST_CHARACTERS } from '../constants/post.constants';
+import { UserIdSchema } from 'shared/schemas/users.schema';
+import { MAX_POST_CHARACTERS, MAX_QUOTE_CHARACTERS } from '../constants/post.constants';
 
 
-// const userid = Joi.string().uuid().required();
-// const content = Joi.string().max(MAX_POST_CHARACTERS).required();
-// const postid = Joi.string().uuid().required()
+const userid = UserIdSchema;
+const content = Joi.string().max(MAX_POST_CHARACTERS).required();
+const postid = Joi.string().uuid().required()
 
-export const CreatePostSchema = Joi.object({
-  userid: Joi.string().uuid().required(),
-  content: Joi.string().max(140).required()
+export const CreatePostSchema = Joi.object().keys({
+  userid,
+  content
 })
 
-// export const CreatePostSchema = Joi.object().keys({
-//   userid,
-//   content
-// })
-
-export const CreateRepostSchema = Joi.object({
-  postid: Joi.string().uuid().required(),
-  userid: Joi.string().uuid().required()
+export const CreateRepostSchema = Joi.object().keys({
+  postid,
+  userid
 })
 
 export const CreateQuoteSchema = Joi.object({
-  userid: Joi.string().uuid().required(),
-  postid: Joi.string().uuid().required(),
-  content: Joi.string().max(140).required()
+  userid,
+  postid,
+  content: content.max(MAX_QUOTE_CHARACTERS)
 })
 
-export const PaginationSchema = Joi.object({
-  limit: Joi.number().min(1).max(10).required(),
-  page: Joi.number().min(1).required(),
-  startDate: Joi.date().iso().messages({ 'date.format': `Date format is YYYY-MM-DD` }),
-  endDate: Joi.date().iso().greater(Joi.ref('startDate'))
-    .messages({
-      'date.format': `Date format is YYYY-MM-DD`,
-      'date.greater': `EndDate must be greater than startDate`
-    })
-})
-
-
-export const UserIdSchema = Joi.string().uuid().required().messages({
-  'string.base': `userid must be a string`,
-  'string.empty': `userid cannot be an empty field`,
-  'string.guid': `userid must be a valid uuid`
-})

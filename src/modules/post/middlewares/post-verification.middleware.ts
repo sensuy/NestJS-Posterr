@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { UserIdSchema } from 'shared/schemas/users.schema';
 import DateFormatService from 'shared/utils/date-format.service';
 import IPostRepository from '../repositories/IPostRepository';
-import { UserIdSchema } from '../schemas/post-schema';
 
 @Injectable()
 export class PostVerificationMiddleware implements NestMiddleware {

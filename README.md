@@ -18,7 +18,7 @@
 - Midlewares para contar a soma dos posts, reposts e quotes.
 - Utilizar o id no header./ listar post por id não está validando o usuário.
 - Escolher o Joi pois ele possui maior nota no snky de segurança, optar por essas bibliotecas.
-
+- Poderia fazer uma paginação bem mais detalhada com pagina final total de página...
 ## License
 
 Nest is [MIT licensed](LICENSE).

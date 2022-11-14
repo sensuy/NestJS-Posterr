@@ -10,7 +10,7 @@ import {
 	ApiTags
 } from "@nestjs/swagger";
 import PostResposnse from "../repositories/typeorm/entities/Post";
-import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema, PaginationSchema } from "../schemas/post-schema";
+import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import { IPaginationByDate } from "shared/interfaces/IPagination";
@@ -18,6 +18,7 @@ import { IUserId } from "shared/interfaces/IUser";
 import { CreatePostDto } from "../dtos/createPost.dto";
 import { CreateQuoteDto } from "../dtos/createQuote.dto";
 import { CreateRepostDTO } from "../dtos/createRepost.dto";
+import { PaginationSchema } from "shared/schemas/pagination.schema";
 
 @ApiTags('Post')
 @Controller()

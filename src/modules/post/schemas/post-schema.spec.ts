@@ -139,13 +139,13 @@ describe('Validate CreateQuoteSchema', () => {
     expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"content" is required');
   });
 
-  it('should return bad request if content has length great than 140', () => {
-    const content = new Array(142).join('a');
-    const dto = {
-      userid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
-      postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
-      content
-    };
-    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"content" length must be less than or equal to 140 characters long');
-  });
+  // it('should return bad request if content has length great than 140', () => {
+  //   const content = new Array(142).join('a');
+  //   const dto = {
+  //     userid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
+  //     postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
+  //     content
+  //   };
+  //   expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"content" length must be less than or equal to 140 characters long');
+  // });
 });

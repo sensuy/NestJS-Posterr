@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from "../repositories/IPostRepository";
 import IUserRepository from "modules/user/repositories/IUserRepository";
 import Post from "../repositories/typeorm/entities/Post";
-import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
-import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
 import { IPaginationByDate } from "shared/interfaces/IPagination";
 import DateFormatService from "shared/utils/date-format.service";
+import { CreatePostDto } from "../dtos/createPost.dto";
+import { CreateQuoteDto } from "../dtos/createQuote.dto";
+import { CreateRepostDTO } from "../dtos/createRepost.dto";
 
 
 @Injectable()
@@ -34,7 +34,6 @@ class PostService {
 		try {
 			posts = await this.postRepository.listPostsByUserId(userid, queryParams);
 		} catch (error) {
-			console.log(error);
 			throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
@@ -57,29 +56,27 @@ class PostService {
 		try {
 			posts = await this.postRepository.listLatestPosts(queryParams);
 		} catch (error) {
-			console.log(error);
-
 			throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
 		return posts;
 	}
 
-	async createPost(payload: ICreatePostDTO): Promise<Post> {
+	async createPost(payload: CreatePostDto): Promise<Post> {
 		let post = this.postRepository.create(payload);
 		try {
 			[post,] = await Promise.all([
 				this.postRepository.save(post),
 				this.userRepository.incrementInteractions(payload.userid)
 			]);
-		} catch (error) {
+		} catch (error) { 
 			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
 		return post;
 	}
 
-	async createRepost(payload: ICreateRepostDTO): Promise<Post> {
+	async createRepost(payload: CreateRepostDTO): Promise<Post> {
 		const post = await this.postRepository.verifyRepostById(payload.postid);
 
 		if (!post) {
@@ -94,7 +91,7 @@ class PostService {
 			throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
 		}
 
-		const repostPayload: ICreatePostDTO = {
+		const repostPayload: CreatePostDto = {
 			userid: payload.userid,
 			content: ''
 		};
@@ -114,7 +111,7 @@ class PostService {
 		return repost;
 	}
 
-	async createQuote(payload: ICreateQuoteDTO): Promise<Post> {
+	async createQuote(payload: CreateQuoteDto): Promise<Post> {
 		const post = await this.postRepository.verifyQuoteById(payload.postid);
 
 		if (!post) {
@@ -129,7 +126,7 @@ class PostService {
 			throw new HttpException('You cannot quote your own post', HttpStatus.FORBIDDEN);
 		}
 
-		const quotePayload: ICreatePostDTO = {
+		const quotePayload: CreatePostDto = {
 			userid: payload.userid,
 			content: payload.content
 		};

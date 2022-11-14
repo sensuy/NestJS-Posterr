@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import IPostRepository from '../../IPostRepository';
 import Post from '../entities/Post';
 import { IPaginationByDate } from 'shared/interfaces/IPagination';
+import { CreatePostDto } from 'modules/post/dtos/createPost.dto';
 
 @Injectable()
 class PostRepository implements IPostRepository {
@@ -14,7 +14,7 @@ class PostRepository implements IPostRepository {
 		private postRepository: Repository<Post>
 	) { }
 
-	public create(data: ICreatePostDTO): Post {
+	public create(data: CreatePostDto): Post {
 		return this.postRepository.create(data);
 	}
 
@@ -28,8 +28,6 @@ class PostRepository implements IPostRepository {
 
 
 	listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
-		console.log({ queryParams });
-
 		const { limit, page, startDate, endDate } = queryParams;
 		let query = this.postRepository.createQueryBuilder('post')
 			.leftJoinAndSelect('post.reposts', 'repost')

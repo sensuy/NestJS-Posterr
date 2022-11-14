@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable, NestMiddleware } from '@
 import { Request, Response, NextFunction } from 'express';
 import DateFormatService from 'shared/utils/date-format.service';
 import IPostRepository from '../repositories/IPostRepository';
+import { UserIdSchema } from '../schemas/post-schema';
 
 @Injectable()
 export class PostVerificationMiddleware implements NestMiddleware {
@@ -11,7 +12,11 @@ export class PostVerificationMiddleware implements NestMiddleware {
 	) { }
 
 	async use(req: Request, res: Response, next: NextFunction) {
-		const {userid} = req.body;
+		const { userid } = req.body;
+    const { error } = UserIdSchema.validate(userid);
+    if (error) {
+      throw new HttpException(error.details[0].message, HttpStatus.BAD_REQUEST);
+    }
 		const initDate = this.dateFormatService.timesTampZeroHour(new Date());
 		const finalDate = this.dateFormatService.addDays(initDate, 1);
 		

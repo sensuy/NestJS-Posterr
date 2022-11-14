@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import ICreatePostDTO from "../dtos/ICreatePostDTO";
-import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
-import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
+import CreateQuoteDto from "../dtos/CreateQuoteDto";
+import CreateRepostDTO from "../dtos/CreateRepostDTO";
 import { CreatePostSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import PostController from "./post.controller"
@@ -16,7 +16,7 @@ describe('Testing PostController', () => {
       postid: '613711df-713d-4e1d-b778-9124ce7a08b1',
       created_at: new Date()
     })),
-    createRepost: jest.fn((dto: ICreateRepostDTO) => ({
+    createRepost: jest.fn((dto: CreateRepostDTO) => ({
       userid: dto.userid,
       content: '',
       reposts: [
@@ -31,7 +31,7 @@ describe('Testing PostController', () => {
       postid: '84dd6d96-0b79-49c8-974f-f4d4c93277c1',
       createdAt: '2022-08-28T18:39:20.219Z'
     })),
-    createQuote: jest.fn((dto: ICreateQuoteDTO) => ({
+    createQuote: jest.fn((dto: CreateQuoteDto) => ({
       userid: dto.userid,
       content: dto.content,
       quotes: [

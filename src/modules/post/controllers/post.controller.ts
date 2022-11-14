@@ -9,16 +9,15 @@ import {
 	ApiServiceUnavailableResponse,
 	ApiTags
 } from "@nestjs/swagger";
-import ICreatePostDTO from 'modules/post/dtos/ICreatePostDTO';
 import PostResposnse from "../repositories/typeorm/entities/Post";
 import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema, PaginationSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
-import ICreateRepostDTO from "../dtos/ICreateRepostDTO";
-import ICreateQuoteDTO from "../dtos/ICreateQuoteDTO";
 import { IPaginationByDate } from "shared/interfaces/IPagination";
 import { IUserId } from "shared/interfaces/IUser";
-import DateFormatService from "shared/utils/date-format.service";
+import { CreatePostDto } from "../dtos/createPost.dto";
+import { CreateQuoteDto } from "../dtos/createQuote.dto";
+import { CreateRepostDTO } from "../dtos/createRepost.dto";
 
 @ApiTags('Post')
 @Controller()
@@ -58,17 +57,17 @@ class PostController {
 	}
 
 	@Post('post')
-	// @ApiOperation({ summary: 'Create a new post.' })
-	// @ApiCreatedResponse({
-	// 	description: 'Post sucessfully created.',
-	// 	type: PostResposnse
-	// })
-	// @ApiBadRequestResponse({ description: 'Validation failed.' })
-	// @ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
-	// @ApiNotFoundResponse({ description: 'User does not exist.' })
-	// @ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
-	@UsePipes(new JoiValidationPipe(CreatePostSchema))
-	async createPost(@Body() payload: ICreatePostDTO): Promise<PostResposnse> {
+	@ApiOperation({ summary: 'Create a new post.' })
+	@ApiCreatedResponse({
+    description: 'Post sucessfully created.',
+		type: PostResposnse
+	})
+	@ApiBadRequestResponse({ description: 'Validation failed.' })
+	@ApiServiceUnavailableResponse({ description: 'Post creation failed.' })
+	@ApiNotFoundResponse({ description: 'User does not exist.' })
+	@ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
+  @UsePipes(new JoiValidationPipe(CreatePostSchema))
+	async createPost(@Body() payload: CreatePostDto): Promise<PostResposnse> {
 		return this.postService.createPost(payload);
 	}
 
@@ -80,7 +79,7 @@ class PostController {
 	@ApiNotFoundResponse({ description: 'User does not exist.  |  Post does not exist.' })
 	@ApiForbiddenResponse({ description: `You can not repost your own post. | You have reached the limit of posts per day | You can not repost a repost` })
 	@UsePipes(new JoiValidationPipe(CreateRepostSchema))
-	async createRepost(@Body() payload: ICreateRepostDTO): Promise<PostResposnse> {
+	async createRepost(@Body() payload: CreateRepostDTO): Promise<PostResposnse> {
 		return this.postService.createRepost(payload);
 	}
 
@@ -92,7 +91,7 @@ class PostController {
 	@ApiNotFoundResponse({ description: 'User does not exist.  |  Post does not exist.' })
 	@ApiForbiddenResponse({ description: 'You cannot quote your own post. | You have reached the limit of posts per day | You can not quote a quote' })
 	@UsePipes(new JoiValidationPipe(CreateQuoteSchema))
-	async createQuote(@Body() payload: ICreateQuoteDTO): Promise<PostResposnse> {
+	async createQuote(@Body() payload: CreateQuoteDto): Promise<PostResposnse> {
 		return this.postService.createQuote(payload);
 	}
 }

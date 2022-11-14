@@ -1,10 +1,10 @@
 import { IPaginationByDate } from "shared/interfaces/IPagination";
-import ICreatePostDTO from "../dtos/ICreatePostDTO";
+import { CreatePostDto } from "../dtos/createPost.dto";
 import Post from './typeorm/entities/Post';
 
 
 interface IPostRepository {
-  create(data: ICreatePostDTO): Post;
+  create(data: CreatePostDto): Post;
   save(post: Post): Promise<Post>;
   listById(postid: string): Promise<Post | null>;
   listPostsByUserId(userid: string, queryParams: IPaginationByDate): Promise<Post[]>;

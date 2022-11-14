@@ -17,7 +17,10 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
 			entities: ['dist/modules/**/repositories/typeorm/entities/*{.ts,.js}'],
 			migrations: ['dist/shared/migrations/*{.ts,.js}'],
 			logging: ['error'],
-			synchronize: false, // never use TRUE in production!
+      subscribers: [
+        'dist/modules/**/repositories/typeorm/subscribers/*{.ts,.js}',
+      ],
+			synchronize: false
 		};
 	}
 }

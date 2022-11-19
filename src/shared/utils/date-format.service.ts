@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
-
-
 @Injectable()
 class DateFormatService {
-
 
 	datesToFilterTimestampByDate(date: Date): Date[] {
 		const year = date.getFullYear();

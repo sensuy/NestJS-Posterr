@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
-import ICreatePostDTO from "../dtos/ICreatePostDTO";
-import CreateQuoteDto from "../dtos/CreateQuoteDto";
-import CreateRepostDTO from "../dtos/CreateRepostDTO";
+import { CreatePostDto } from "../dtos/createPost.dto";
+import { CreateQuoteDto } from "../dtos/createQuote.dto";
+import { CreateRepostDTO } from "../dtos/createRepost.dto";
 import { CreatePostSchema } from "../schemas/post-schema";
 import PostService from "../services/post.service";
 import PostController from "./post.controller"
@@ -11,7 +11,7 @@ describe('Testing PostController', () => {
   let controller: PostController;
 
   const mockPostService = {
-    createPost: jest.fn((dto: ICreatePostDTO) => ({
+    createPost: jest.fn((dto: CreatePostDto) => ({
       ...dto,
       postid: '613711df-713d-4e1d-b778-9124ce7a08b1',
       created_at: new Date()

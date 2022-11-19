@@ -12,138 +12,208 @@ import { CreateRepostDTO } from "../dtos/createRepost.dto";
 @Injectable()
 class PostService {
 
-	constructor(
-		@Inject('IPostRepository') private postRepository: IPostRepository,
-		@Inject('IUserRepository') private userRepository: IUserRepository,
-		private dateFormatService: DateFormatService
-	) { }
+  constructor(
+    @Inject('IPostRepository') private postRepository: IPostRepository,
+    @Inject('IUserRepository') private userRepository: IUserRepository,
+    private dateFormatService: DateFormatService
+  ) { }
 
 
-	async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
-		if (queryParams.startDate) {
-			const startDate = new Date(queryParams.startDate);
-			Object.assign(queryParams, { startDate });
-		}
+  async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
 
-		if (queryParams.endDate) {
-			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
-			Object.assign(queryParams, { endDate });
-		}
+    const user = await this.userRepository.listById(userid);
+    if (!user) {
+      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
+    }
 
-		let posts: Post[];
-		try {
-			posts = await this.postRepository.listPostsByUserId(userid, queryParams);
-		} catch (error) {
-			throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
-		}
+    if (queryParams.startDate) {
+      const startDate = new Date(queryParams.startDate);
+      Object.assign(queryParams, { startDate });
+    }
 
-		return posts;
-	}
+    if (queryParams.endDate) {
+      const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+      Object.assign(queryParams, { endDate });
+    }
 
-	async listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
+    let posts: Post[];
+    try {
+      posts = await this.postRepository.listPostsByUserId(userid, queryParams);
+    } catch (error) {
+      throw new HttpException('List users posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
-		if (queryParams.startDate) {
-			const startDate = new Date(queryParams.startDate);
-			Object.assign(queryParams, { startDate });
-		}
+    return posts;
+  }
 
-		if (queryParams.endDate) {
-			const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
-			Object.assign(queryParams, { endDate });
-		}
+  async listLatestPosts(queryParams: IPaginationByDate): Promise<Post[]> {
 
-		let posts: Post[];
-		try {
-			posts = await this.postRepository.listLatestPosts(queryParams);
-		} catch (error) {
-			throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
-		}
+    if (queryParams.startDate) {
+      const startDate = new Date(queryParams.startDate);
+      Object.assign(queryParams, { startDate });
+    }
 
-		return posts;
-	}
+    if (queryParams.endDate) {
+      const endDate = this.dateFormatService.addDays(queryParams.endDate, 1);
+      Object.assign(queryParams, { endDate });
+    }
 
-	async createPost(payload: CreatePostDto): Promise<Post> {
-		let post = this.postRepository.create(payload);
-		try {
-			[post,] = await Promise.all([
-				this.postRepository.save(post),
-				this.userRepository.incrementInteractions(payload.userid)
-			]);
-		} catch (error) { 
-			throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
-		}
+    let posts: Post[];
+    try {
+      posts = await this.postRepository.listLatestPosts(queryParams);
+    } catch (error) {
+      throw new HttpException('List posts failed.', HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
-		return post;
-	}
+    return posts;
+  }
 
-	async createRepost(payload: CreateRepostDTO): Promise<Post> {
-		const post = await this.postRepository.verifyRepostById(payload.postid);
+  async createPost(payload: CreatePostDto): Promise<Post> {
 
-		if (!post) {
-			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
-		}
+    const user = await this.userRepository.listById(payload.userid);
+    if (!user) {
+      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
+    }
 
-		if (post.reposts.length >= 1) {
-			throw new HttpException('You can not repost a repost', HttpStatus.FORBIDDEN);
-		}
+    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
+    const finalDate = this.dateFormatService.addDays(initDate, 1);
 
-		if (post.userid === payload.userid) {
-			throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
-		}
+    const count = await this.postRepository.countUserPostByDate(
+      payload.userid,
+      initDate,
+      finalDate
+    );
 
-		const repostPayload: CreatePostDto = {
-			userid: payload.userid,
-			content: ''
-		};
+    if (count >= 5) {
+      throw new HttpException(
+        'You have reached the limit of posts per day',
+        HttpStatus.FORBIDDEN
+      );
+    }
 
-		let repost = this.postRepository.create(repostPayload);
-		repost.reposts = [post];
+    let post = this.postRepository.create(payload);
+    try {
+      [post,] = await Promise.all([
+        this.postRepository.save(post),
+        this.userRepository.incrementInteractions(payload.userid)
+      ]);
+    } catch (error) {
+      throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
-		try {
-			[repost,] = await Promise.all([
-				this.postRepository.save(repost),
-				this.userRepository.incrementInteractions(payload.userid)
-			]);
-		} catch (error) {
-			throw new HttpException('Repost creation failed', HttpStatus.SERVICE_UNAVAILABLE);
-		}
+    return post;
+  }
 
-		return repost;
-	}
+  async createRepost(payload: CreateRepostDTO): Promise<Post> {
+    const user = await this.userRepository.listById(payload.userid);
+    if (!user) {
+      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
+    }
 
-	async createQuote(payload: CreateQuoteDto): Promise<Post> {
-		const post = await this.postRepository.verifyQuoteById(payload.postid);
+    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
+    const finalDate = this.dateFormatService.addDays(initDate, 1);
 
-		if (!post) {
-			throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
-		}
+    const count = await this.postRepository.countUserPostByDate(
+      payload.userid,
+      initDate,
+      finalDate
+    );
 
-		if (post.quotes.length >= 1) {
-			throw new HttpException('You can not quote a quote', HttpStatus.FORBIDDEN);
-		}
+    if (count >= 5) {
+      throw new HttpException(
+        'You have reached the limit of posts per day',
+        HttpStatus.FORBIDDEN
+      );
+    }
 
-		if (post.userid === payload.userid) {
-			throw new HttpException('You cannot quote your own post', HttpStatus.FORBIDDEN);
-		}
+    const post = await this.postRepository.verifyRepostById(payload.postid);
 
-		const quotePayload: CreatePostDto = {
-			userid: payload.userid,
-			content: payload.content
-		};
+    if (!post) {
+      throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
+    }
 
-		let quote = this.postRepository.create(quotePayload);
-		quote.quotes = [post];
+    if (post.reposts.length >= 1) {
+      throw new HttpException('You can not repost a repost', HttpStatus.FORBIDDEN);
+    }
 
-		try {
-			[quote,] = await Promise.all([
-				this.postRepository.save(quote),
-				this.userRepository.incrementInteractions(payload.userid)
-			]);
-		} catch (error) {
-			throw new HttpException('Quote creation failed', HttpStatus.SERVICE_UNAVAILABLE);
-		}
-		return quote;
-	}
+    if (post.userid === payload.userid) {
+      throw new HttpException('You cannot repost your own post', HttpStatus.FORBIDDEN);
+    }
+
+    const repostPayload: CreatePostDto = {
+      userid: payload.userid,
+      content: ''
+    };
+
+    let repost = this.postRepository.create(repostPayload);
+    repost.reposts = [post];
+
+    try {
+      [repost,] = await Promise.all([
+        this.postRepository.save(repost),
+        this.userRepository.incrementInteractions(payload.userid)
+      ]);
+    } catch (error) {
+      throw new HttpException('Repost creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    return repost;
+  }
+
+  async createQuote(payload: CreateQuoteDto): Promise<Post> {
+    const user = await this.userRepository.listById(payload.userid);
+    if (!user) {
+      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
+    }
+
+    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
+    const finalDate = this.dateFormatService.addDays(initDate, 1);
+
+    const count = await this.postRepository.countUserPostByDate(
+      payload.userid,
+      initDate,
+      finalDate
+    );
+
+    if (count >= 5) {
+      throw new HttpException(
+        'You have reached the limit of posts per day',
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    const post = await this.postRepository.verifyQuoteById(payload.postid);
+
+    if (!post) {
+      throw new HttpException('Post does not exist.', HttpStatus.NOT_FOUND);
+    }
+
+    if (post.quotes.length >= 1) {
+      throw new HttpException('You can not quote a quote', HttpStatus.FORBIDDEN);
+    }
+
+    if (post.userid === payload.userid) {
+      throw new HttpException('You cannot quote your own post', HttpStatus.FORBIDDEN);
+    }
+
+    const quotePayload: CreatePostDto = {
+      userid: payload.userid,
+      content: payload.content
+    };
+
+    let quote = this.postRepository.create(quotePayload);
+    quote.quotes = [post];
+
+    try {
+      [quote,] = await Promise.all([
+        this.postRepository.save(quote),
+        this.userRepository.incrementInteractions(payload.userid)
+      ]);
+    } catch (error) {
+      throw new HttpException('Quote creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    return quote;
+  }
 
 
 }

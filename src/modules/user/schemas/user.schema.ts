@@ -1,12 +1,14 @@
 import * as Joi from 'joi';
+import { MAX_USER_NAME_CHARACTERS } from '../constants/user.constants';
+
+const userName = Joi.string().alphanum().max(MAX_USER_NAME_CHARACTERS).required()
 
 export const SeedUserSchema = Joi.array().items(
 	Joi.object({
-		userName: Joi.string().alphanum().max(14).required(),
+		userName
 	}));
 
-export const FindUserSchema = Joi.string().max(14).required()
-
+export const FindUserSchema = userName;
 
 export const userSchemaResponse = {
 	type: 'array',

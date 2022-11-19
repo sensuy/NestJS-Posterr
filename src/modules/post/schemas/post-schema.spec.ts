@@ -24,7 +24,7 @@ describe('Validate CreatePostSchema', () => {
       userid: 'not-a-uuid',
       content: 'I love this post!'
     };
-    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" must be a valid GUID');
+    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid must be a valid uuid');
   });
 
   it('should return bad request if content is not defined', () => {
@@ -82,7 +82,7 @@ describe('Validate CreateRepostSchema', () => {
       postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
       userid: 'not-a-uuid'
     };
-    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" must be a valid GUID');
+    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid must be a valid uuid');
   });
 
 });
@@ -111,7 +111,7 @@ describe('Validate CreateQuoteSchema', () => {
       postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
       content: 'I love this post!'
     };
-    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" must be a valid GUID');
+    expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid must be a valid uuid');
   });
 
   it('should return bad request if postid is not defined', () => {

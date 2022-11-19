@@ -6,7 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { UtilsModule } from 'shared/utils/utils.module';
 import { TypeOrmConfig } from 'configs/typeorm';
 
-@Module({
+@Module({ 
 	imports: [
 		ConfigModule.forRoot({ isGlobal: true }),
 		TypeOrmModule.forRootAsync({ useClass: TypeOrmConfig }),

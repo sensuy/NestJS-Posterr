@@ -14,7 +14,6 @@ import { CreatePostSchema, CreateQuoteSchema, CreateRepostSchema } from "../sche
 import PostService from "../services/post.service";
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import { IPaginationByDate } from "shared/interfaces/IPagination";
-import { IUserId } from "shared/interfaces/IUser";
 import { CreatePostDto } from "../dtos/createPost.dto";
 import { CreateQuoteDto } from "../dtos/createQuote.dto";
 import { CreateRepostDTO } from "../dtos/createRepost.dto";
@@ -38,10 +37,9 @@ class PostController {
 	@ApiServiceUnavailableResponse({ description: 'List posts failed.' })
 	async getLatestPostsByUser(
 		@Query(new JoiValidationPipe(PaginationSchema)) queryParams: IPaginationByDate,
-		@Param() useridParam: IUserId
+		@Param() useridParam: string
 	): Promise<PostResposnse[]> {
-		const { userid } = useridParam;
-		return this.postService.listUserPosts(userid, queryParams);
+		return this.postService.listUserPosts(useridParam, queryParams);
 	}
 
 	@Get('post')

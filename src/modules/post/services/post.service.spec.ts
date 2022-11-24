@@ -1,16 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import DateFormatService from "shared/utils/date-format.service";
-import { Repository } from "typeorm";
 import { mockPostRepository } from "../../../../mocks/Post/fakeRepository";
-import Post from "../repositories/typeorm/entities/Post";
 import PostService from "./post.service";
 
 
 
 describe('PostService', () => {
   let service: PostService;
-
-
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

@@ -7,6 +7,7 @@ import DateFormatService from "shared/utils/date-format.service";
 import { CreatePostDto } from "../dtos/createPost.dto";
 import { CreateQuoteDto } from "../dtos/createQuote.dto";
 import { CreateRepostDTO } from "../dtos/createRepost.dto";
+import { MAX_LIMIT_POSTS_PER_DAY } from "../constants/post.constants";
 
 
 @Injectable()
@@ -84,7 +85,7 @@ class PostService {
       finalDate
     );
 
-    if (count >= 5) {
+    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
       throw new HttpException(
         'You have reached the limit of posts per day',
         HttpStatus.FORBIDDEN
@@ -92,14 +93,11 @@ class PostService {
     }
 
     let post = this.postRepository.create(payload);
-    try {
-      [post,] = await Promise.all([
-        this.postRepository.save(post),
-        this.userRepository.incrementInteractions(payload.userid)
-      ]);
-    } catch (error) {
-      throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
-    }
+
+    [post,] = await Promise.all([
+      this.postRepository.save(post),
+      this.userRepository.incrementInteractions(payload.userid)
+    ]);
 
     return post;
   }

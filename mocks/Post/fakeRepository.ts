@@ -11,7 +11,7 @@ export const mockPostRepository = {
   // listById: jest.fn((postid: string) => (makeFakeQuote(postid))),
   listLatestPosts: jest.fn((queryParams: IPaginationByDate) => (makeFakeArrayPosts())),
   listPostsByUserId: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts())),
-  countUserPostByDate: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts())),
+  countUserPostByDate: jest.fn((useridParam, queryParams) => (4)),
   verifyRepostById: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts())),
   verifyQuoteById: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts()))
 }

@@ -4,6 +4,7 @@ import DateFormatService from "shared/utils/date-format.service";
 import { mockPostRepository } from "../../../../mocks/Post/fakeRepository";
 import { mockUserRepository } from "../../../../mocks/User/fakeRepository";
 import { CreatePostDto } from "../dtos/createPost.dto";
+import { CreateRepostDTO } from "../dtos/createRepost.dto";
 import PostService from "./post.service";
 
 
@@ -73,14 +74,46 @@ describe('PostService', () => {
       expect(mockPostRepository.countUserPostByDate).toHaveBeenCalledTimes(1);
       expect(post).rejects.toThrowError('You have reached the limit of posts per day');
     });
+  });
 
-    // it.only('it should be able to trhow a error if could not save the post at database', async () => {
+  describe.only(PostService.prototype.createRepost, () => {
 
-    //   const post = async () => await service.createPost(postDto);
+    const repostDto: CreateRepostDTO = {
+      postid: '8d27c1bb-5534-4b02-9c67-bee7aae4ad86',
+      userid: '8d27c1bb-5534-4b02-9c67-bee7aae4ad86'
+    }
 
-    //   // expect(mockPostRepository.countUserPostByDate).toHaveBeenCalled();
-    //   // expect(mockPostRepository.countUserPostByDate).toHaveBeenCalledTimes(1);
-    //   expect(post).rejects.toThrowError('Post creation failed');
-    // });
-  })
+    it.only('should be able to create a new repost', async () => {
+
+      const repost = await service.createRepost(repostDto);
+
+      expect(repost).toHaveProperty('postid');
+      expect(repost).toHaveProperty('createdAt');
+    });
+
+    it('it should be able to trhow a error if user was not found', async () => {
+
+      jest.spyOn(mockUserRepository, 'listById').mockImplementationOnce(() => (null));
+
+      const post = async () => await service.createRepost(repostDto);
+
+      // expect(mockUserRepository.listById).toHaveBeenCalled();
+      expect(mockUserRepository.listById).toHaveBeenCalledWith(repostDto.userid);
+      // expect(mockUserRepository.listById).toHaveBeenCalledTimes(1);
+      expect(post).rejects.toThrowError('User does not exist.');
+    });
+
+    it('it should be able to trhow a error if user exceed the limit post per day', async () => {
+
+      jest.spyOn(mockPostRepository, 'countUserPostByDate').mockImplementationOnce(() => 5);
+
+      const post = async () => await service.createRepost(repostDto);
+
+      expect(mockPostRepository.countUserPostByDate).toHaveBeenCalled();
+      expect(mockPostRepository.countUserPostByDate).toHaveBeenCalledTimes(1);
+      expect(post).rejects.toThrowError('You have reached the limit of posts per day');
+    });
+  });
+
+
 })

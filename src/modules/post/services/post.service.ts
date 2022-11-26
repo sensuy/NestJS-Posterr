@@ -104,6 +104,7 @@ class PostService {
 
   async createRepost(payload: CreateRepostDTO): Promise<Post> {
     const user = await this.userRepository.listById(payload.userid);
+
     if (!user) {
       throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
     }

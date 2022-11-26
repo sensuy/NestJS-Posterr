@@ -3,8 +3,8 @@ import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse
 import { JoiValidationPipe } from "shared/utils/JoiValidationPipe";
 import ISeedUsersDTO from 'modules/user/dtos/ISeedUsersDTO';
 import UserService from "../services/user.service";
-import { FindUserSchema, SeedUserSchema, userSchemaResponse } from "../schemas/user.schema";
 import User from "../repositories/typeorm/entities/User";
+import { FindUserSchema, SeedUserSchema, userSchemaResponse } from "../schemas/user-schema";
 
 @ApiTags('User')
 @Controller('user')

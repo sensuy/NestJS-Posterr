@@ -1,10 +1,10 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import Post from './repositories/typeorm/entities/Post';
 import PostController from 'modules/post/controllers/post.controller';
 import PostService from './services/post.service';
-import { UserModule } from 'modules/user/user.module';
 import PostRepository from './repositories/typeorm/repositories/PostRepository';
+import { UserModule } from '../user/user.module';
 
 
 @Module({

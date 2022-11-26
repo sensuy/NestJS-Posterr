@@ -66,7 +66,7 @@ class PostController {
 	@ApiNotFoundResponse({ description: 'User does not exist.' })
 	@ApiForbiddenResponse({ description: 'You have reached the limit of posts per day' })
   @UsePipes(new JoiValidationPipe(CreatePostSchema))
-	async createPost(@Body() payload: CreatePostDto): Promise<PostResposnse> {
+	async createPost(@Body() payload: CreatePostDto): Promise<PostResposnse> {    
 		return this.postService.createPost(payload);
 	}
 

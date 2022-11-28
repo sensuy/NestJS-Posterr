@@ -7,7 +7,9 @@ export const makeFakePost = (dto: CreatePostDto) => {
   return {
     ...dto,
     postid: '613711df-713d-4e1d-b778-9124ce7a08b1',
-    createdAt: '2022-11-20T18:08:49.016Z'
+    createdAt: '2022-11-20T18:08:49.016Z',
+    quotes: [],
+    reposts: []
   }
 }
 
@@ -24,6 +26,7 @@ export const makeFakeRepost = (dto: CreateRepostDTO) => {
         reposts: []
       }
     ],
+    quotes: [],
     postid: '84dd6d96-0b79-49c8-974f-f4d4c93277c1',
     createdAt: '2022-08-28T18:39:20.219Z'
   }
@@ -42,6 +45,7 @@ export const makeFakeQuote = (dto: CreateQuoteDto) => {
         quotes: []
       }
     ],
+    reposts: [],
     postid: 'dd80f721-2a56-4060-998e-ec4abf2542d2',
     createdAt: '2022-08-28T19:25:45.422Z'
   }

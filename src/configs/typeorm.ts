@@ -14,12 +14,9 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
 			database: this.config.get<string>('DATABASE_NAME'),
 			username: this.config.get<string>('DATABASE_USER'),
 			password: this.config.get<string>('DATABASE_PASSWORD'),
-			entities: ['dist/modules/**/repositories/typeorm/entities/*{.ts,.js}'],
-			migrations: ['dist/shared/migrations/*{.ts,.js}'],
+			entities: ['dist/src/modules/**/repositories/typeorm/entities/*{.ts,.js}'],
+			migrations: ['dist/src/shared/migrations/*{.ts,.js}'],
 			logging: ['error'],
-      subscribers: [
-        'dist/modules/**/repositories/typeorm/subscribers/*{.ts,.js}',
-      ],
 			synchronize: false
 		};
 	}

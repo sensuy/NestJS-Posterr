@@ -8,10 +8,10 @@ import { makeFakeArrayPosts, makeFakePost, makeFakeQuote, makeFakeRepost } from 
 export const mockPostRepository = {
   create: jest.fn((dto: CreatePostDto) => (makeFakePost(dto))),
   save: jest.fn((dto: Post) => (makeFakePost(dto))),
-  // listById: jest.fn((postid: string) => (makeFakeRepost(postid))),
+  listById: jest.fn((postid: string) => (null)),
   listLatestPosts: jest.fn((queryParams: IPaginationByDate) => (makeFakeArrayPosts())),
   listPostsByUserId: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts())),
   countUserPostByDate: jest.fn((useridParam, queryParams) => (4)),
   verifyRepostById: jest.fn((postid: string) => (makeFakeArrayPosts()[0])),
-  verifyQuoteById: jest.fn((useridParam, queryParams) => (makeFakeArrayPosts()))
+  verifyQuoteById: jest.fn((postid: string) => (makeFakeArrayPosts()[0]))
 }

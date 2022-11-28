@@ -22,12 +22,12 @@ export class IPaginationByDate extends IPagination {
 		required: false,
 		example: '2022-08-08'
 	})
-	startDate: Date;
+	startDate?: Date;
 	@ApiProperty({
 		description: 'The maximum date of the results',
 		type: 'string',
 		required: false,
 		example: '2022-08-13'
 	})
-	endDate: Date;
+	endDate?: Date;
 }

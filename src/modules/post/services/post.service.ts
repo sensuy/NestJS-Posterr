@@ -94,10 +94,14 @@ class PostService {
 
     let post = this.postRepository.create(payload);
 
-    [post,] = await Promise.all([
-      this.postRepository.save(post),
-      this.userRepository.incrementInteractions(payload.userid)
-    ]);
+    try {
+      [post,] = await Promise.all([
+        this.postRepository.save(post),
+        this.userRepository.incrementInteractions(payload.userid)
+      ]);
+    } catch (error) {
+      throw new HttpException('Post creation failed', HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
     return post;
   }
@@ -118,7 +122,7 @@ class PostService {
       finalDate
     );
 
-    if (count >= 5) {
+    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
       throw new HttpException(
         'You have reached the limit of posts per day',
         HttpStatus.FORBIDDEN
@@ -174,7 +178,7 @@ class PostService {
       finalDate
     );
 
-    if (count >= 5) {
+    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
       throw new HttpException(
         'You have reached the limit of posts per day',
         HttpStatus.FORBIDDEN

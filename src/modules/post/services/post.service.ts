@@ -19,7 +19,6 @@ class PostService {
     private dateFormatService: DateFormatService
   ) { }
 
-
   async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
 
     if (queryParams.startDate) {
@@ -65,23 +64,6 @@ class PostService {
   }
 
   async createPost(payload: CreatePostDto): Promise<Post> {
-
-    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
-    const finalDate = this.dateFormatService.addDays(initDate, 1);
-
-    const count = await this.postRepository.countUserPostByDate(
-      payload.userid,
-      initDate,
-      finalDate
-    );
-
-    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
-      throw new HttpException(
-        'You have reached the limit of posts per day',
-        HttpStatus.FORBIDDEN
-      );
-    }
-
     let post = this.postRepository.create(payload);
 
     try {
@@ -97,23 +79,6 @@ class PostService {
   }
 
   async createRepost(payload: CreateRepostDTO): Promise<Post> {
-
-    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
-    const finalDate = this.dateFormatService.addDays(initDate, 1);
-
-    const count = await this.postRepository.countUserPostByDate(
-      payload.userid,
-      initDate,
-      finalDate
-    );
-
-    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
-      throw new HttpException(
-        'You have reached the limit of posts per day',
-        HttpStatus.FORBIDDEN
-      );
-    }
-
     const post = await this.postRepository.verifyRepostById(payload.postid);
 
     if (!post) {
@@ -149,23 +114,6 @@ class PostService {
   }
 
   async createQuote(payload: CreateQuoteDto): Promise<Post> {
-
-    const initDate = this.dateFormatService.timesTampZeroHour(new Date());
-    const finalDate = this.dateFormatService.addDays(initDate, 1);
-
-    const count = await this.postRepository.countUserPostByDate(
-      payload.userid,
-      initDate,
-      finalDate
-    );
-
-    if (count >= MAX_LIMIT_POSTS_PER_DAY) {
-      throw new HttpException(
-        'You have reached the limit of posts per day',
-        HttpStatus.FORBIDDEN
-      );
-    }
-
     const post = await this.postRepository.verifyQuoteById(payload.postid);
 
     if (!post) {

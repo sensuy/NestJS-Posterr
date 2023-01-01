@@ -1,5 +1,5 @@
-import { HttpException, NotFoundException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
+import { IPaginationByDate } from "shared/interfaces/IPagination";
 import DateFormatService from "shared/utils/date-format.service";
 import { makeFakeArrayPosts, makeFakePost, makeFakeQuote, makeFakeRepost } from "../../../../mocks/Post/factories";
 import { mockPostRepository } from "../../../../mocks/Post/fakeRepository";
@@ -10,6 +10,18 @@ import { CreateRepostDTO } from "../dtos/createRepost.dto";
 import PostService from "./post.service";
 
 
+const makePayloadListUserPost = (dataRange?: boolean) => {
+  const userid = '8d27c1bb-5534-4b02-9c67-bee7aae4ad86'; 
+  const queryParams: IPaginationByDate = {
+    limit: 10,
+    page: 1
+  }
+
+  if(dataRange){
+   Object.assign(queryParams, {startDate: new Date('2021-01-01'), endDate: new Date('2021-01-02')});
+  }
+  return {userid, queryParams};
+}
 
 describe('PostService', () => {
   let service: PostService;
@@ -39,6 +51,34 @@ describe('PostService', () => {
     expect(service).toBeDefined();
   });
 
+
+  describe(PostService.prototype.listUserPosts, () => {
+    it('should return posts without limit dates params', async () => {
+      const {userid, queryParams} = makePayloadListUserPost();
+
+      const posts = await service.listUserPosts(userid, queryParams);
+      expect(posts).toEqual(makeFakeArrayPosts());
+    });
+
+    it('should return posts with limit dates params', async () => {
+      const {userid, queryParams} = makePayloadListUserPost(true);
+
+      const posts = await service.listUserPosts(userid, queryParams);
+      expect(posts).toEqual(makeFakeArrayPosts());
+    });
+
+    it('should able to return a error if listUserPosts fail', async () => {
+      const {userid, queryParams} = makePayloadListUserPost(true);
+
+      jest.spyOn(mockPostRepository, 'listPostsByUserId')
+        .mockImplementationOnce(() => { throw new Error() });
+
+      const posts = async () => await service.listUserPosts(userid, queryParams);
+
+      expect(posts).rejects.toThrowError('List users posts failed.');
+    });
+  })
+
   describe(PostService.prototype.listLatestPosts, () => {
     it('should return posts without limit dates params', async () => {
       const posts = await service.listLatestPosts({
@@ -59,7 +99,6 @@ describe('PostService', () => {
     });
 
     it('should able to return a error if listLatestPosts fail', async () => {
-
       jest.spyOn(mockPostRepository, 'listLatestPosts')
         .mockImplementationOnce(() => { throw new Error() });
 
@@ -85,17 +124,6 @@ describe('PostService', () => {
 
       expect(post).toHaveProperty('postid');
       expect(post).toHaveProperty('createdAt');
-    });
-
-    it('it should be able to trhow a error if user exceed the limit post per day', async () => {
-
-      jest.spyOn(mockPostRepository, 'countUserPostByDate').mockImplementationOnce(() => 5);
-
-      const post = async () => await service.createPost(postDto);
-
-      expect(mockPostRepository.countUserPostByDate).toHaveBeenCalled();
-      expect(mockPostRepository.countUserPostByDate).toHaveBeenCalledTimes(1);
-      expect(post).rejects.toThrowError('You have reached the limit of posts per day');
     });
 
     it('Shoul be able to trhow a error if post creation faild', async () => {
@@ -135,16 +163,7 @@ describe('PostService', () => {
       expect(repost.reposts[0].postid).toEqual(repostDto.postid);
     });
 
-    it('it should be able to trhow a error if user exceed the limit post per day', async () => {
-
-      jest.spyOn(mockPostRepository, 'countUserPostByDate').mockImplementationOnce(() => 5);
-
-      const post = async () => await service.createRepost(repostDto);
-
-      expect(post).rejects.toThrowError('You have reached the limit of posts per day');
-    });
-
-    it('it should be able to trhow a error if post was not found', async () => {
+    it('should be able to trhow a error if post was not found', async () => {
 
       jest.spyOn(mockPostRepository, 'verifyRepostById').mockImplementationOnce(() => (null));
 
@@ -210,16 +229,7 @@ describe('PostService', () => {
       expect(quote.quotes[0].postid).toEqual(quoteDto.postid);
     });
 
-    it('it should be able to trhow a error if user exceed the limit post per day', async () => {
-
-      jest.spyOn(mockPostRepository, 'countUserPostByDate').mockImplementationOnce(() => 5);
-
-      const post = async () => await service.createQuote(quoteDto);
-
-      expect(post).rejects.toThrowError('You have reached the limit of posts per day');
-    });
-
-    it('it should be able to trhow a error if post was not found', async () => {
+    it('should be able to trhow a error if post was not found', async () => {
 
       jest.spyOn(mockPostRepository, 'verifyQuoteById').mockImplementationOnce(() => (null));
 

@@ -54,7 +54,7 @@ describe('UserVerificationMiddleware', () => {
   });
 
 
-  it('it should be able to trhow a error if user was not found', () => {
+  it('should be able to trhow a error if user was not found', () => {
     const req: any = {
       body: {
         userid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',

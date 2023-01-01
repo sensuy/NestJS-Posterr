@@ -29,7 +29,7 @@ describe('PostVerificationMiddleware', () => {
     expect(midleWare).toBeDefined();
   });
 
-  it('should be able to throw a error if postid is not defined', () => {
+  it('should be able to trhow a error if user exceed the limit post per day', () => {
       
       const req: any = {
         body: {

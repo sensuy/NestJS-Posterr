@@ -5,6 +5,9 @@ import PostController from 'modules/post/controllers/post.controller';
 import PostService from './services/post.service';
 import PostRepository from './repositories/typeorm/repositories/PostRepository';
 import { UserModule } from '../user/user.module';
+import { MiddlewareConsumer, NestModule } from '@nestjs/common/interfaces';
+import { UserVerificationMiddleware } from './middleware/user-verification.middleware';
+
 
 
 @Module({
@@ -20,4 +23,10 @@ import { UserModule } from '../user/user.module';
     }
   ],
 })
-export class PostModule {}
+export class PostModule  implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+		consumer
+		  .apply(UserVerificationMiddleware)
+		  .forRoutes(PostController);
+	  }
+}

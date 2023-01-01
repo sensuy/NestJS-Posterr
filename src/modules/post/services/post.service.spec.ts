@@ -58,12 +58,12 @@ describe('PostService', () => {
       expect(posts).toEqual(makeFakeArrayPosts());
     });
 
-    it.only('should able to return a error if listLatestPosts fail', async () => {
+    it('should able to return a error if listLatestPosts fail', async () => {
 
       jest.spyOn(mockPostRepository, 'listLatestPosts')
         .mockImplementationOnce(() => { throw new Error() });
 
-      const posts = await service.listLatestPosts({
+      const posts = async () => await service.listLatestPosts({
         limit: 10,
         page: 1
       });
@@ -85,18 +85,6 @@ describe('PostService', () => {
 
       expect(post).toHaveProperty('postid');
       expect(post).toHaveProperty('createdAt');
-    });
-
-    it('it should be able to trhow a error if user was not found', async () => {
-
-      jest.spyOn(mockUserRepository, 'listById').mockImplementationOnce(() => (null));
-
-      const post = async () => await service.createPost(postDto);
-
-      expect(mockUserRepository.listById).toHaveBeenCalled();
-      expect(mockUserRepository.listById).toHaveBeenCalledWith(postDto.userid);
-      expect(mockUserRepository.listById).toHaveBeenCalledTimes(1);
-      expect(post).rejects.toThrowError('User does not exist.');
     });
 
     it('it should be able to trhow a error if user exceed the limit post per day', async () => {
@@ -145,16 +133,6 @@ describe('PostService', () => {
       expect(repost).toHaveProperty('createdAt');
       expect(repost.userid).toEqual(repostDto.userid);
       expect(repost.reposts[0].postid).toEqual(repostDto.postid);
-    });
-
-    it('it should be able to trhow a error if user was not found', async () => {
-
-      jest.spyOn(mockUserRepository, 'listById').mockImplementationOnce(() => (null));
-
-      const post = async () => await service.createRepost(repostDto);
-
-      expect(mockUserRepository.listById).toHaveBeenCalledWith(repostDto.userid);
-      expect(post).rejects.toThrowError('User does not exist.');
     });
 
     it('it should be able to trhow a error if user exceed the limit post per day', async () => {
@@ -230,16 +208,6 @@ describe('PostService', () => {
       expect(quote.userid).toEqual(quoteDto.userid);
       expect(quote.content).toEqual(quoteDto.content);
       expect(quote.quotes[0].postid).toEqual(quoteDto.postid);
-    });
-
-    it('it should be able to trhow a error if user was not found', async () => {
-
-      jest.spyOn(mockUserRepository, 'listById').mockImplementationOnce(() => (null));
-
-      const post = async () => await service.createQuote(quoteDto);
-
-      expect(mockUserRepository.listById).toHaveBeenCalledWith(quoteDto.userid);
-      expect(post).rejects.toThrowError('User does not exist.');
     });
 
     it('it should be able to trhow a error if user exceed the limit post per day', async () => {

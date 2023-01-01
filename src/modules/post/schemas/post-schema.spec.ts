@@ -17,7 +17,7 @@ describe('PostSchema', () => {
       const dto = {
         content: 'I love this post!'
       };
-      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" is required');
+      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid is a required field');
     });
 
     it('should return bad request if userid is not a uuid', () => {
@@ -75,7 +75,7 @@ describe('PostSchema', () => {
       const dto = {
         postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d'
       };
-      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" is required');
+      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid is a required field');
     });
 
     it('should return bad request if userid is not a uuid', () => {
@@ -103,7 +103,7 @@ describe('PostSchema', () => {
         postid: 'b3dac166-4006-455f-a9c3-9e2a69568b6d',
         content: 'I love this post!'
       };
-      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('"userid" is required');
+      expect(() => validatePipe.transform(dto, { type: "body" })).toThrowError('userid is a required field');
     });
 
     it('should return bad request if userid is not a uuid', () => {

@@ -22,11 +22,6 @@ class PostService {
 
   async listUserPosts(userid: string, queryParams: IPaginationByDate): Promise<Post[]> {
 
-    const user = await this.userRepository.listById(userid);
-    if (!user) {
-      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-    }
-
     if (queryParams.startDate) {
       const startDate = new Date(queryParams.startDate);
       Object.assign(queryParams, { startDate });
@@ -71,11 +66,6 @@ class PostService {
 
   async createPost(payload: CreatePostDto): Promise<Post> {
 
-    const user = await this.userRepository.listById(payload.userid);
-    if (!user) {
-      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-    }
-
     const initDate = this.dateFormatService.timesTampZeroHour(new Date());
     const finalDate = this.dateFormatService.addDays(initDate, 1);
 
@@ -107,11 +97,6 @@ class PostService {
   }
 
   async createRepost(payload: CreateRepostDTO): Promise<Post> {
-    const user = await this.userRepository.listById(payload.userid);
-
-    if (!user) {
-      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-    }
 
     const initDate = this.dateFormatService.timesTampZeroHour(new Date());
     const finalDate = this.dateFormatService.addDays(initDate, 1);
@@ -164,10 +149,6 @@ class PostService {
   }
 
   async createQuote(payload: CreateQuoteDto): Promise<Post> {
-    const user = await this.userRepository.listById(payload.userid);
-    if (!user) {
-      throw new HttpException('User does not exist.', HttpStatus.NOT_FOUND);
-    }
 
     const initDate = this.dateFormatService.timesTampZeroHour(new Date());
     const finalDate = this.dateFormatService.addDays(initDate, 1);

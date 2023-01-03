@@ -39,7 +39,7 @@ class UserController {
 		type: 'string',
 		example: 'Reviewer' 
 	})
-	@ApiOkResponse({ description: 'User sucessfully found.', type: [User] })
+	@ApiOkResponse({ description: 'User sucessfully found.', type: User})
 	@ApiBadRequestResponse({ description: 'Name invalid' })
 	@ApiNotFoundResponse({ description: 'User not found.' })
 	@ApiServiceUnavailableResponse({ description: 'User could not be found.' })

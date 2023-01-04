@@ -25,7 +25,6 @@ const makePayloadListUserPost = (dataRange?: boolean) => {
 
 describe('PostService', () => {
   let service: PostService;
-  let dateFormatService: DateFormatService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -44,7 +43,6 @@ describe('PostService', () => {
     }).compile();
 
     service = module.get<PostService>(PostService);
-    dateFormatService = module.get<DateFormatService>(DateFormatService);
   });
 
   it('PostService should be defined', () => {
